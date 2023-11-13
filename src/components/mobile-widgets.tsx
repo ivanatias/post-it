@@ -61,7 +61,7 @@ interface SearchBoxProps {
 
 function SearchBox({ closeSearchBox }: SearchBoxProps) {
   return (
-    <div className='flex items-center justify-center gap-4 p-10 absolute top-0 left-0 bg-slate-950 w-full animate-fade-down animate-duration-300 animate-ease-in-out'>
+    <div className='flex items-center justify-center gap-4 p-10 absolute top-0 left-0 border-b border-b-slate-800 bg-slate-950 w-full animate-fade-down animate-duration-300 animate-ease-in-out'>
       <button
         className='text-white'
         aria-label='Close search box'
