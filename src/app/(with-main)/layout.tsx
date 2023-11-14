@@ -8,11 +8,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className='hidden md:flex'>
           <Sidebar />
         </div>
-        <div className='flex flex-col w-full'>
+        <div className='flex flex-col w-full h-screen'>
           <header>
             <Navbar />
           </header>
-          <main className='pt-16 px-6 lg:px-12 w-full h-screen overflow-y-scroll hide-scrollbar'>
+          <main className='relative pt-16 px-6 lg:px-12 pb-12 overflow-y-auto hide-scrollbar'>
             {children}
           </main>
         </div>
