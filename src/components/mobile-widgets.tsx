@@ -19,7 +19,7 @@ export function MobileWidgets() {
 
   return (
     <div className='flex md:hidden text-white'>
-      <div className='flex items-center gap-5'>
+      <div className='flex items-center gap-4'>
         <button aria-label='Open menu' onClick={toggleMenu}>
           <MenuIcon />
         </button>

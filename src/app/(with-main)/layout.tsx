@@ -12,7 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <header>
             <Navbar />
           </header>
-          <main className='pt-16 px-7 w-full h-screen overflow-y-scroll hide-scrollbar'>
+          <main className='pt-16 px-6 lg:px-12 w-full h-screen overflow-y-scroll hide-scrollbar'>
             {children}
           </main>
         </div>
