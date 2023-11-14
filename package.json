@@ -13,6 +13,7 @@
     "@clerk/nextjs": "4.27.1",
     "@clerk/themes": "1.7.9",
     "@sanity/image-url": "1.0.2",
+    "@sanity/vision": "3.19.2",
     "axios": "1.6.1",
     "next": "14.0.2",
     "next-sanity": "6.0.1",

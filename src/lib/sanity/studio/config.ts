@@ -1,5 +1,6 @@
 import { defineConfig, type SingleWorkspace } from 'sanity'
 import { deskTool } from 'sanity/desk'
+import { visionTool } from '@sanity/vision'
 import { dataset, projectId } from '../client/config'
 import * as documents from '../schemas'
 
@@ -8,7 +9,7 @@ const config = {
   projectId,
   title: 'Post it studio',
   basePath: '/studio',
-  plugins: [deskTool()],
+  plugins: [deskTool(), visionTool()],
   schema: {
     types: Object.values(documents)
   }
