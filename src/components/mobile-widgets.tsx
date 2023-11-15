@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Sidebar } from './sidebar'
 import { Search } from './search'
-import { CloseIcon, MenuIcon, SearchIcon } from './icons'
+import { MenuIcon, SearchIcon, PlusIcon } from 'lucide-react'
 
 export function MobileWidgets() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -21,10 +21,10 @@ export function MobileWidgets() {
     <div className='flex md:hidden text-white'>
       <div className='flex items-center gap-4'>
         <button aria-label='Open menu' onClick={toggleMenu}>
-          <MenuIcon />
+          <MenuIcon className='hover:drop-shadow-[0_0_2px_#eee]' />
         </button>
         <button aria-label='Open search box' onClick={toggleSearchBox}>
-          <SearchIcon />
+          <SearchIcon className='hover:drop-shadow-[0_0_2px_#eee]' />
         </button>
       </div>
       {menuOpen && <MobileMenu closeMenu={toggleMenu} />}
@@ -46,7 +46,7 @@ function MobileMenu({ closeMenu }: MobileMenuProps) {
           className='absolute right-5 top-7'
           onClick={closeMenu}
         >
-          <CloseIcon />
+          <PlusIcon className='hover:drop-shadow-[0_0_2px_#eee] rotate-45 w-6 h-6' />
         </button>
         <Sidebar closeSidebar={closeMenu} />
       </div>
@@ -67,7 +67,7 @@ function SearchBox({ closeSearchBox }: SearchBoxProps) {
         aria-label='Close search box'
         onClick={closeSearchBox}
       >
-        <CloseIcon />
+        <PlusIcon className='hover:drop-shadow-[0_0_2px_#eee] rotate-45 w-6 h-6' />
       </button>
       <Search onSearch={closeSearchBox} className='w-full max-w-xs' />
     </div>
