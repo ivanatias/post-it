@@ -59,6 +59,9 @@ export function PostCard({ post }: PostCardProps) {
         alt={post.title}
         className='w-full h-auto rounded-xl'
       />
+      <p className='text-sm md:text-sm lg:text-base text-slate-300'>
+        {post.title}
+      </p>
     </article>
   )
 }
