@@ -1,12 +1,28 @@
 'use client'
 
-import { ClientOnly } from '@/components/utils/client-only'
+import { useEffect, useState } from 'react'
 import { SignIn } from '@clerk/nextjs'
 
 export function SignInBox() {
-  return (
-    <ClientOnly mountAfterMs={1200}>
-      <SignIn />
-    </ClientOnly>
-  )
+  const [showSignIn, setShowSignIn] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowSignIn(true)
+    }, 1200)
+  }, [])
+
+  if (!showSignIn) {
+    return (
+      <img
+        src='/logo.svg'
+        alt='Post it logo'
+        width={240}
+        height={120}
+        className='animate-pulse'
+      />
+    )
+  }
+
+  return <SignIn />
 }
