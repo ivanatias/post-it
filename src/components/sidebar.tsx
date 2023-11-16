@@ -2,10 +2,11 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { Spinner } from './spinner'
 import { useUser } from '@clerk/nextjs'
 import { usePathname } from 'next/navigation'
 import { categories } from '@/constants/categories'
-import { Spinner } from './spinner'
+import { parseUserID } from '@/lib/utils'
 
 interface NavLinkProps {
   href: string
@@ -32,9 +33,7 @@ function NavLink({ href, children, closeSidebar }: NavLinkProps) {
 export function Sidebar({ closeSidebar }: { closeSidebar?: () => void }) {
   const { user, isLoaded } = useUser()
 
-  const parsedUserID = user?.id.split('user_').at(1)
-  const userImageSrc =
-    user?.hasImage === true ? user.imageUrl : '/user-placeholder.png'
+  const parsedUserID = parseUserID(user?.id as string)
 
   return (
     <aside className='text-slate-300 flex-col items-center border-r md:border-r-slate-800 border-r-slate-700 w-full h-full p-5 overflow-y-auto shadow-md hide-scrollbar md:bg-slate-950/30 bg-slate-950 md:h-screen md:w-56 md:justify-start'>
@@ -43,7 +42,7 @@ export function Sidebar({ closeSidebar }: { closeSidebar?: () => void }) {
           <NavLink href={`/user/${parsedUserID}`} closeSidebar={closeSidebar}>
             <Image
               alt={`${user?.fullName} avatar image`}
-              src={userImageSrc}
+              src={user?.imageUrl as string}
               width={80}
               height={80}
               objectFit='cover'
@@ -54,7 +53,7 @@ export function Sidebar({ closeSidebar }: { closeSidebar?: () => void }) {
           <Spinner width={80} />
         )}
       </div>
-      <h2 className='mt-3 mb-3 text-base lg:text-lg font-bold text-center text-white'>
+      <h2 className='h-[50px] my-3 text-base lg:text-lg font-bold text-center text-white'>
         {user?.fullName}
       </h2>
       <div className='flex flex-col items-center gap-4'>

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
+import { Toaster } from 'sonner'
 import { dark } from '@clerk/themes'
 import './globals.css'
 
@@ -31,6 +32,7 @@ export default function RootLayout({
           }}
         >
           {children}
+          <Toaster />
         </ClerkProvider>
       </body>
     </html>

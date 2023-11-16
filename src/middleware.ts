@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { authMiddleware, redirectToSignIn } from '@clerk/nextjs'
 import { decodeJwt } from '@clerk/nextjs/api'
 import { client } from './lib/sanity/client'
+import { parseUserID } from './lib/utils'
 import { type Jwt } from '@clerk/types'
 import { type IdentifiedSanityDocumentStub } from 'next-sanity'
 
@@ -42,7 +43,7 @@ export default authMiddleware({
       const { fullName, hasImage, imageUrl } = decodedToken.payload
 
       const userTag = fullName.split(' ').join('').toLocaleLowerCase()
-      const id = auth.userId.split('user_').at(1) as string
+      const userID = parseUserID(auth.userId)
       const image = hasImage
         ? (imageUrl as string)
         : `${origin}/user-placeholder.png`
@@ -50,15 +51,15 @@ export default authMiddleware({
       const doc: IdentifiedSanityDocumentStub<UserDoc> = {
         _type: 'user',
         userName: fullName,
-        _id: id,
+        _id: userID,
         image,
         userTag
       }
 
       const userExists =
         (await client.fetch<string | null>(
-          `*[_type == "user" && _id == $id][0]._id`,
-          { id }
+          `*[_type == "user" && _id == $userID][0]._id`,
+          { userID }
         )) !== null
 
       userExists ? await client.createOrReplace(doc) : await client.create(doc)

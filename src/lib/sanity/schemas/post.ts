@@ -49,5 +49,9 @@ export const post = defineType({
       type: 'array',
       of: [{ type: 'comment' }]
     })
-  ]
+  ],
+  initialValue: {
+    saved: [],
+    comments: []
+  }
 })
