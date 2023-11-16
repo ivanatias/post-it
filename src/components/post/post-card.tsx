@@ -22,7 +22,11 @@ export function PostCard({ post, loggedInUserID }: PostCardProps) {
   const isPostByUser = post.postedBy._id === loggedInUserID
 
   return (
-    <article className='flex flex-col gap-5 border border-slate-700 bg-slate-900 p-3 rounded-xl'>
+    <article
+      className={`flex flex-col gap-5 border border-slate-700 bg-slate-900 p-3 rounded-xl
+      ${doingAction ? 'animate-pulse' : ''}
+    `}
+    >
       <header className='flex items-center justify-between'>
         <Link
           className='flex items-center gap-3'

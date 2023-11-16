@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, startTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { togglePostLike } from '@/services/posts'
 import { toast } from 'sonner'
@@ -32,8 +32,10 @@ export function usePostActions({ userID, postID, saved }: UsePostActions) {
     toast.promise(togglePostLike({ postID, userID, endpoint }), {
       loading: loadingMsg,
       success: () => {
-        setDoingAction(false)
-        router.refresh()
+        startTransition(() => {
+          setDoingAction(false)
+          router.refresh()
+        })
         return successMsg
       },
       error: () => {
