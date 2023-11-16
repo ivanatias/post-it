@@ -33,7 +33,7 @@ function NavLink({ href, children, closeSidebar }: NavLinkProps) {
 export function Sidebar({ closeSidebar }: { closeSidebar?: () => void }) {
   const { user, isLoaded } = useUser()
 
-  const parsedUserID = parseUserID(user?.id as string)
+  const parsedUserID = isLoaded ? parseUserID(user?.id as string) : ''
 
   return (
     <aside className='text-slate-300 flex-col items-center border-r md:border-r-slate-800 border-r-slate-700 w-full h-full p-5 overflow-y-auto shadow-md hide-scrollbar md:bg-slate-950/30 bg-slate-950 md:h-screen md:w-56 md:justify-start'>
