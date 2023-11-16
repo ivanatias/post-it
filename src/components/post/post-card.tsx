@@ -1,65 +1,26 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { useUser } from '@clerk/nextjs'
-import { AvatarFallback } from '@radix-ui/react-avatar'
-import { Avatar, AvatarImage } from '../ui/avatar'
+import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar'
 import { Skeleton } from '../ui/skeleton'
 import { HeartIcon, DownloadIcon, Trash } from 'lucide-react'
-import { togglePostLike } from '@/services/posts'
-import { toast } from 'sonner'
-import { parseUserID } from '@/lib/utils'
+import { usePostActions } from './hooks/use-post-actions'
 import type { Post } from '@/lib/sanity/types/post'
 
 interface PostCardProps {
   post: Post
+  loggedInUserID: string
 }
 
-export function PostCard({ post }: PostCardProps) {
-  const [doingAction, setDoingAction] = useState(false)
-  const router = useRouter()
-  const { user } = useUser()
-
-  const parsedUserID = parseUserID(user?.id as string)
-
-  const postAlreadyLiked = post.saved.some(el => {
-    return el.postedBy._id === parsedUserID
-  })
-
-  const isPostByUser = post.postedBy._id === parsedUserID
-
-  const handleToggleLikePost = ({
-    postID,
-    userID
-  }: {
-    postID: string
-    userID: string
-  }) => {
-    const endpoint = postAlreadyLiked ? '/api/posts/unlike' : '/api/posts/like'
-
-    const loadingMsg = postAlreadyLiked ? 'Unliking post...' : 'Liking post...'
-    const successMsg = postAlreadyLiked ? 'Post unliked!' : 'Post liked!'
-    const errorMsg = `Could not ${
-      postAlreadyLiked ? 'unlike' : 'like'
-    } post due to error, try again.`
-
-    setDoingAction(true)
-
-    toast.promise(togglePostLike({ postID, userID, endpoint }), {
-      loading: loadingMsg,
-      success: () => {
-        setDoingAction(false)
-        router.refresh()
-        return successMsg
-      },
-      error: () => {
-        setDoingAction(false)
-        return errorMsg
-      }
+export function PostCard({ post, loggedInUserID }: PostCardProps) {
+  const { doingAction, handleToggleLikePost, postAlreadyLiked } =
+    usePostActions({
+      userID: loggedInUserID,
+      postID: post._id,
+      saved: post.saved
     })
-  }
+
+  const isPostByUser = post.postedBy._id === loggedInUserID
 
   return (
     <article className='flex flex-col gap-5 border border-slate-700 bg-slate-900 p-3 rounded-xl'>
@@ -91,12 +52,7 @@ export function PostCard({ post }: PostCardProps) {
             } disabled:text-muted-foreground disabled:cursor-not-allowed
             `}
             aria-label={postAlreadyLiked ? 'Unlike post' : 'Like post'}
-            onClick={() => {
-              handleToggleLikePost({
-                postID: post._id,
-                userID: parsedUserID
-              })
-            }}
+            onClick={handleToggleLikePost}
             disabled={doingAction}
           >
             <HeartIcon className='w-5 h-5' />
