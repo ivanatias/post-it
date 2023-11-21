@@ -36,7 +36,7 @@ export function Sidebar({ closeSidebar }: { closeSidebar?: () => void }) {
   const parsedUserID = isLoaded ? parseUserID(user?.id as string) : ''
 
   return (
-    <aside className='text-slate-300 flex-col items-center border-r md:border-r-slate-800 border-r-slate-700 w-full h-full p-5 overflow-y-auto shadow-md hide-scrollbar md:bg-slate-950/30 bg-slate-950 md:h-screen md:w-56 md:justify-start'>
+    <aside className='text-slate-300 flex-col items-center border-r lg:border-r-slate-800 border-r-slate-700 w-full h-full p-5 overflow-y-auto shadow-md hide-scrollbar lg:bg-slate-950/30 bg-slate-950 lg:h-screen lg:w-56 lg:justify-start'>
       <div className='flex items-center justify-center h-24 mb-5'>
         {isLoaded ? (
           <NavLink href={`/user/${parsedUserID}`} closeSidebar={closeSidebar}>

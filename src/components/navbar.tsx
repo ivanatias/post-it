@@ -8,7 +8,7 @@ export function Navbar() {
   return (
     <nav className='relative flex items-center justify-between w-full gap-3 py-3'>
       <img src='/logo.svg' alt='Post it logo' width={140} height={80} />
-      <div className='text-muted-foreground hidden md:flex md:flex-1 md:gap-2 md:items-center'>
+      <div className='text-muted-foreground hidden lg:flex lg:flex-1 lg:gap-2 lg:items-center'>
         <SearchIcon />
         <Search className='w-full max-w-2xl' />
       </div>

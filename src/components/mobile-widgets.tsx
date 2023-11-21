@@ -18,7 +18,7 @@ export function MobileWidgets() {
   }
 
   return (
-    <div className='flex md:hidden text-white'>
+    <div className='flex lg:hidden text-white'>
       <div className='flex items-center gap-4'>
         <button aria-label='Open menu' onClick={toggleMenu}>
           <MenuIcon className='hover:drop-shadow-[0_0_2px_#eee]' />
@@ -39,7 +39,7 @@ interface MobileMenuProps {
 
 function MobileMenu({ closeMenu }: MobileMenuProps) {
   return (
-    <div className='flex z-10 animate-fade-right animate-once animate-duration-300 animate-ease-in-out fixed top-0 left-0 md:hidden w-full h-screen'>
+    <div className='flex z-10 animate-fade-right animate-once animate-duration-300 animate-ease-in-out fixed top-0 left-0 lg:hidden w-full h-screen'>
       <div className='relative flex flex-col flex-[0.6]'>
         <button
           aria-label='Close menu'
