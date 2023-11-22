@@ -23,16 +23,19 @@ export const postFormSchema = z.object({
       {
         message: `Only ${ALLOWED_IMAGE_EXTENSIONS} are allowed`
       }
+    )
+    .refine(
+      val => {
+        return val !== undefined && val !== null
+      },
+      {
+        message: 'Image is required'
+      }
     ),
   title: z.string().min(5, {
     message: 'Title should be at least 5 characters'
   }),
-  description: z
-    .string()
-    .min(10, {
-      message: 'Description should be at least 10 characters'
-    })
-    .optional(),
+  description: z.string().optional(),
   category: z.string().refine(
     val => {
       return val.length > 0
