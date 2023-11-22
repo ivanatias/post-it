@@ -12,12 +12,16 @@ interface PostCardProps {
 }
 
 export function PostCard({ post, loggedInUserID }: PostCardProps) {
-  const { doingAction, handleToggleLikePost, postAlreadyLiked } =
-    usePostActions({
-      userID: loggedInUserID,
-      postID: post._id,
-      saved: post.saved
-    })
+  const {
+    doingAction,
+    handleToggleLikePost,
+    handleDeletePost,
+    postAlreadyLiked
+  } = usePostActions({
+    userID: loggedInUserID,
+    postID: post._id,
+    saved: post.saved
+  })
 
   const isPostByUser = post.postedBy._id === loggedInUserID
 
@@ -75,6 +79,7 @@ export function PostCard({ post, loggedInUserID }: PostCardProps) {
               } disabled:cursor-not-allowed disabled:text-muted-foreground`}
               aria-label='Delete post'
               disabled={doingAction}
+              onClick={handleDeletePost}
             >
               <Trash className='w-5 h-5' />
             </button>

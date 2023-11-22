@@ -1,6 +1,6 @@
 import { useState, startTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { togglePostLike } from '@/services/posts'
+import { togglePostLike, deletePost } from '@/services/posts'
 import { toast } from 'sonner'
 import { type Saved } from '@/lib/sanity/types/post'
 
@@ -45,9 +45,26 @@ export function usePostActions({ userID, postID, saved }: UsePostActions) {
     })
   }
 
+  const handleDeletePost = () => {
+    setDoingAction(true)
+
+    toast.promise(deletePost(postID), {
+      loading: 'Deleting post...',
+      success: () => {
+        startTransition(() => {
+          setDoingAction(false)
+          router.refresh()
+        })
+        return 'Post deleted!'
+      },
+      error: 'Error deleting post, try again.'
+    })
+  }
+
   return {
     postAlreadyLiked,
     doingAction,
-    handleToggleLikePost
+    handleToggleLikePost,
+    handleDeletePost
   }
 }

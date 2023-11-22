@@ -17,3 +17,15 @@ export const togglePostLike = async ({
 
   if (!res.ok) throw new Error('Error performing action, try again.')
 }
+
+export const deletePost = async (postID: string) => {
+  const res = await fetch(`/api/posts`, {
+    method: 'DELETE',
+    body: JSON.stringify({ postID }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+
+  if (!res.ok) throw new Error('Error performing action, try again.')
+}
