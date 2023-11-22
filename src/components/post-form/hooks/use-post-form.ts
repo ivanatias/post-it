@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createPost } from '../actions'
 import { postFormSchema, type PostFormSchema } from '@/lib/schemas/post-form'
-import { initialFormState } from '../constants'
+import { INITIAL_FORM_STATE } from '../constants'
 
 export interface UsePostForm {
   action: 'create' | 'edit'
@@ -49,7 +49,7 @@ export function usePostForm({
           }
         }
 
-  const [formState, formAction] = useFormState(actionFn, initialFormState)
+  const [formState, formAction] = useFormState(actionFn, INITIAL_FORM_STATE)
 
   useEffect(() => {
     const fileObjectURL = previewImageURL

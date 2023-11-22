@@ -1,4 +1,8 @@
 import * as z from 'zod'
+import {
+  ALLOWED_IMAGE_FORMATS,
+  ALLOWED_IMAGE_EXTENSIONS
+} from '@/constants/allowed-image-formats'
 
 export const postFormSchema = z.object({
   image: z
@@ -14,18 +18,10 @@ export const postFormSchema = z.object({
     )
     .refine(
       val => {
-        const ALLOWED_TYPES = [
-          'image/jpeg',
-          'image/png',
-          'image/webp',
-          'image/gif',
-          'image/svg+xml',
-          'image/tiff'
-        ]
-        return ALLOWED_TYPES.includes(val.type)
+        return ALLOWED_IMAGE_FORMATS.includes(val.type)
       },
       {
-        message: 'Only JPEG, PNG, WEBP, GIF, SVG, TIFF formats are allowed'
+        message: `Only ${ALLOWED_IMAGE_EXTENSIONS} are allowed`
       }
     ),
   title: z.string().min(5, {
