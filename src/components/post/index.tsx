@@ -1,6 +1,17 @@
 'use client'
 
 import Link from 'next/link'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogFooter,
+  DialogClose,
+  DialogTitle,
+  DialogTrigger
+} from '../ui/dialog'
+import { Button } from '../ui/button'
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar'
 import { HeartIcon, DownloadIcon, Trash } from 'lucide-react'
 import { usePostActions } from './hooks/use-post-actions'
@@ -73,16 +84,40 @@ export function PostCard({ post, loggedInUserID }: PostCardProps) {
             <DownloadIcon className='w-5 h-5' />
           </a>
           {isPostByUser && (
-            <button
-              className={`${
-                doingAction ? 'opacity-80' : 'hover:drop-shadow-[0_0_2px_#eee]'
-              } disabled:cursor-not-allowed disabled:text-muted-foreground`}
-              aria-label='Delete post'
-              disabled={doingAction}
-              onClick={handleDeletePost}
-            >
-              <Trash className='w-5 h-5' />
-            </button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <button
+                  className={`${
+                    doingAction
+                      ? 'opacity-80'
+                      : 'hover:drop-shadow-[0_0_2px_#eee]'
+                  } disabled:cursor-not-allowed disabled:text-muted-foreground`}
+                  aria-label='Delete post'
+                  disabled={doingAction}
+                >
+                  <Trash className='w-5 h-5' />
+                </button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Are you sure absolutely sure?</DialogTitle>
+                  <DialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your post.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter className='w-full flex items-center justify-center gap-4'>
+                  <DialogClose asChild>
+                    <Button variant='ghost'>Cancel</Button>
+                  </DialogClose>
+                  <DialogClose asChild>
+                    <Button variant='destructive' onClick={handleDeletePost}>
+                      Yes, delete
+                    </Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           )}
         </div>
       </header>
