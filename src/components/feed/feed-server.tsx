@@ -1,5 +1,5 @@
 import { currentUser } from '@clerk/nextjs'
-import { PostCard } from '../post/post-card'
+import { PostCard } from '../post'
 import { MasonryLayout } from '../utils/masonry-layout'
 import { client } from '@/lib/sanity/client'
 import { getAllPostsQuery } from '@/lib/sanity/queries'

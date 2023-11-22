@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { FeedServer } from '@/components/feed/feed-server'
-import { PostCardSkeleton } from '@/components/post/post-skeleton'
+import { PostCardSkeleton } from '@/components/post/components/post-skeleton'
 
 const SKELETONS_DIMENSIONS = [
   {

@@ -18,7 +18,7 @@ import {
 } from '../ui/select'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
-import { SubmitButton } from './submit-btn'
+import { SubmitButton } from './components/submit-btn'
 import { usePostForm, type UsePostForm } from './hooks/use-post-form'
 import { FORM_STATUS } from './constants'
 import { categories } from '@/constants/categories'
