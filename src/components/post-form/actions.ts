@@ -2,6 +2,8 @@
 
 import { client } from '@/lib/sanity/client'
 import { postFormSchema } from '@/lib/schemas/post-form'
+import { redirect } from 'next/navigation'
+import { revalidatePath } from 'next/cache'
 import { FORM_STATUS } from './constants'
 
 export const createPost = async (
@@ -26,10 +28,9 @@ export const createPost = async (
   }
 
   const userID = formData.get('userID') as string
+  const data = parse.data
 
   try {
-    const data = parse.data
-
     const asset = await client.assets.upload('image', data.image, {
       filename: data.image.name,
       contentType: data.image.type
@@ -57,15 +58,18 @@ export const createPost = async (
     }
 
     await client.create(doc)
-
-    return {
-      status: FORM_STATUS.SUCCESS,
-      message: 'Post created successfully!'
-    }
   } catch {
     return {
       status: FORM_STATUS.ERROR,
       message: 'Could not create post, try again.'
     }
+  }
+
+  revalidatePath('/')
+  redirect('/')
+
+  return {
+    status: FORM_STATUS.SUCCESS,
+    message: 'Post created successfully!'
   }
 }
