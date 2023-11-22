@@ -21,7 +21,7 @@ export const createPost = async (
   if (!parse.success) {
     return {
       status: FORM_STATUS.ERROR,
-      message: parse.error.message
+      message: 'Invalid inputs'
     }
   }
 

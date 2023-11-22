@@ -22,6 +22,7 @@ import { SubmitButton } from './components/submit-btn'
 import { usePostForm, type UsePostForm } from './hooks/use-post-form'
 import { FORM_STATUS } from './constants'
 import { categories } from '@/constants/categories'
+import { ALLOWED_IMAGE_EXTENSIONS } from '@/constants/allowed-image-formats'
 
 type PostFormProps = UsePostForm
 
@@ -46,7 +47,7 @@ export function PostForm(props: PostFormProps) {
         ) : (
           <div className='grid place-content-center gap-3 w-full h-full text-xs lg:text-sm text-center text-muted-foreground'>
             <p className='font-semibold'>Upload an image for your post</p>
-            <p>Accepted formats: JPEG, PNG, SVG, WEBP, GIF, TIFF</p>
+            <p>Accepted formats: {ALLOWED_IMAGE_EXTENSIONS}</p>
             <p className='underline'>Maximum size of 15 MB</p>
           </div>
         )}
@@ -113,7 +114,11 @@ export function PostForm(props: PostFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue=''>
+                <Select
+                  name='category'
+                  onValueChange={field.onChange}
+                  defaultValue=''
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder='Select a category for your post' />
