@@ -51,6 +51,13 @@ export function usePostForm({
 
   const [formState, formAction] = useFormState(actionFn, INITIAL_FORM_STATE)
 
+  const isEditing = [
+    initialImageURL,
+    initialTitle,
+    initialDescription,
+    initialCategory
+  ].every(el => el !== undefined)
+
   useEffect(() => {
     const fileObjectURL = previewImageURL
 
@@ -60,9 +67,11 @@ export function usePostForm({
   }, [previewImageURL])
 
   const updatePreviewImageURL = (file?: File) => {
-    if (file === undefined) return
-
-    setPreviewImageURL(URL.createObjectURL(file))
+    if (file !== undefined) {
+      setPreviewImageURL(URL.createObjectURL(file))
+    } else {
+      setPreviewImageURL('')
+    }
   }
 
   const performAction = async (formData: FormData) => {
@@ -78,6 +87,7 @@ export function usePostForm({
     form,
     previewImageURL,
     formState,
+    isEditing,
     performAction,
     updatePreviewImageURL
   }

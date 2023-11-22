@@ -32,13 +32,14 @@ export function PostForm(props: PostFormProps) {
     formState,
     performAction,
     previewImageURL,
+    isEditing,
     updatePreviewImageURL
   } = usePostForm(props)
 
   return (
     <div className='flex flex-col items-center'>
       <div className='border border-border w-full max-w-lg h-80 rounded-md p-4'>
-        {previewImageURL !== '' && form.getValues('image') !== undefined ? (
+        {previewImageURL !== '' ? (
           <img
             src={previewImageURL}
             alt='Preview image for post'
@@ -54,29 +55,31 @@ export function PostForm(props: PostFormProps) {
       </div>
       <Form {...form}>
         <form action={performAction} className='w-full flex flex-col gap-8'>
-          <FormField
-            control={form.control}
-            name='image'
-            render={({ field }) => (
-              <FormItem className='max-w-sm'>
-                <FormLabel>Image</FormLabel>
-                <FormControl>
-                  <Input
-                    name='image'
-                    type='file'
-                    className='cursor-pointer'
-                    onChange={e => {
-                      const file = e.target.files?.[0]
-                      field.onChange(file)
-                      updatePreviewImageURL(file)
-                    }}
-                  />
-                </FormControl>
-                <FormDescription>The image for your post</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {isEditing ? null : (
+            <FormField
+              control={form.control}
+              name='image'
+              render={({ field }) => (
+                <FormItem className='max-w-sm'>
+                  <FormLabel>Image</FormLabel>
+                  <FormControl>
+                    <Input
+                      name='image'
+                      type='file'
+                      className='cursor-pointer'
+                      onChange={e => {
+                        const file = e.target.files?.[0]
+                        field.onChange(file)
+                        updatePreviewImageURL(file)
+                      }}
+                    />
+                  </FormControl>
+                  <FormDescription>The image for your post</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
           <FormField
             control={form.control}
             name='title'
@@ -96,7 +99,7 @@ export function PostForm(props: PostFormProps) {
             name='description'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>Description (optional)</FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder='Visiting Norway... Ah! What a beautiful country'
