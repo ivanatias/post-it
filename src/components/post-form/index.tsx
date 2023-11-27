@@ -20,7 +20,7 @@ import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
 import { SubmitButton } from './components/submit-btn'
 import { usePostForm, type UsePostForm } from './hooks/use-post-form'
-import { FORM_STATUS } from './constants'
+import { FORM_STATUS } from '@/constants/forms'
 import { categories } from '@/constants/categories'
 import { ALLOWED_IMAGE_EXTENSIONS } from '@/constants/allowed-image-formats'
 

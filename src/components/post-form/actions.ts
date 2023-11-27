@@ -4,13 +4,13 @@ import { client } from '@/lib/sanity/client'
 import { postFormSchema } from '@/lib/schemas/post-form'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { FORM_STATUS } from './constants'
+import { FORM_STATUS, type FormStatus } from '@/constants/forms'
 
 export const createPost = async (
   _prevState: any,
   formData: FormData
 ): Promise<{
-  status: (typeof FORM_STATUS)[keyof typeof FORM_STATUS]
+  status: FormStatus
   message: string
 }> => {
   const parse = postFormSchema.safeParse({

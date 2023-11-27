@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createPost } from '../actions'
 import { postFormSchema, type PostFormSchema } from '@/lib/schemas/post-form'
-import { INITIAL_FORM_STATE } from '../constants'
+import { INITIAL_FORM_STATE } from '@/constants/forms'
 
 export interface UsePostForm {
   action: 'create' | 'edit'
