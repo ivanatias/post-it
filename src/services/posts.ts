@@ -29,3 +29,25 @@ export const deletePost = async (postID: string) => {
 
   if (!res.ok) throw new Error('Error performing action, try again.')
 }
+
+export const deleteCommentFromPost = async ({
+  commentKey,
+  postID
+}: {
+  commentKey: string
+  postID: string
+}): Promise<{ deletedCommentKey: string }> => {
+  const res = await fetch(`/api/comments`, {
+    method: 'DELETE',
+    body: JSON.stringify({ commentKey, postID }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+
+  if (!res.ok) throw new Error('Error performing action, try again.')
+
+  const { deletedCommentKey } = await res.json()
+
+  return deletedCommentKey
+}

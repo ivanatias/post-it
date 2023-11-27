@@ -7,12 +7,27 @@ export interface Post {
   title: string
 }
 
+export interface PostDetails extends Omit<Post, 'saved'> {
+  description: string
+  saved: Array<{
+    _key: string
+    postedBy: PostedBy
+  }>
+}
+
 export interface Image {
   asset: Asset
 }
 
 export interface Asset {
   url: string
+}
+
+export interface Comment {
+  _key: string
+  comment: string
+  postedBy: PostedBy
+  createdAt: string
 }
 
 export interface PostedBy {

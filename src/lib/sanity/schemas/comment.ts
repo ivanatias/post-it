@@ -14,6 +14,11 @@ export const comment = defineType({
       name: 'comment',
       title: 'Comment',
       type: 'string'
+    }),
+    defineField({
+      name: 'createdAt',
+      title: 'Created at',
+      type: 'datetime'
     })
   ]
 })

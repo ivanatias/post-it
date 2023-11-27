@@ -1,9 +1,15 @@
 import { Navbar } from '@/components/navbar'
 import { Sidebar } from '@/components/sidebar'
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({
+  children,
+  modal
+}: {
+  children: React.ReactNode
+  modal: React.ReactNode
+}) {
   return (
-    <div className='flex'>
+    <div className='relative flex'>
       <div className='hidden lg:flex'>
         <Sidebar />
       </div>
@@ -15,6 +21,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           {children}
         </main>
       </div>
+      {modal}
     </div>
   )
 }
