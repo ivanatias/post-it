@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import {
   Dialog,
   DialogContent,
@@ -34,15 +35,25 @@ export function PostCard({ post, loggedInUserID }: PostCardProps) {
     saved: post.saved
   })
 
+  const router = useRouter()
+
   const isPostByUser = post.postedBy._id === loggedInUserID
 
   return (
     <article
-      className={`flex flex-col gap-5 border border-slate-700 bg-slate-900 p-3 rounded-xl
-      ${doingAction ? 'animate-pulse' : ''}
+      className={`flex flex-col gap-5 border cursor-pointer border-slate-700 bg-slate-900 p-3 rounded-xl
+      ${doingAction ? 'animate-pulse' : ''} hover:bg-slate-950 transition
     `}
+      onClick={() => {
+        router.push(`/post/${post._id}`)
+      }}
     >
-      <header className='flex items-center justify-between'>
+      <header
+        className='flex items-center justify-between'
+        onClick={e => {
+          e.stopPropagation()
+        }}
+      >
         <Link
           className='flex items-center gap-3'
           href={`/user/${post.postedBy._id}`}
