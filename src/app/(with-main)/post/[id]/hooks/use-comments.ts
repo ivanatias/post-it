@@ -111,7 +111,7 @@ export function useComments({ comments, loggedInUser }: UseComments) {
         //  prev.filter(comment => comment._key !== deletedCommentKey)
         // )
         setIsPendingDelete(false)
-        router.push(`/post/${postID}?update=${new Date().valueOf()}`)
+        router.replace(`/post/${postID}?update=${new Date().valueOf()}`)
         return 'Comment deleted'
       },
       error: () => {
