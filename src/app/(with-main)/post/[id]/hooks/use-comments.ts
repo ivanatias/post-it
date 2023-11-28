@@ -5,7 +5,7 @@ import {
   useRef,
   type ElementRef
 } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { addNewComment } from '../actions'
 import { deleteCommentFromPost } from '@/services/posts'
 import { toast } from 'sonner'
@@ -36,6 +36,7 @@ export function useComments({ comments, loggedInUser }: UseComments) {
     }
   )
 
+  const router = useRouter()
   const { id: postID } = useParams()
 
   const commentsFormRef = useRef<ElementRef<'form'>>(null)
@@ -102,14 +103,15 @@ export function useComments({ comments, loggedInUser }: UseComments) {
 
     toast.promise(deleteCommentFromPost({ commentKey, postID }), {
       loading: 'Deleting comment...',
-      success: ({ deletedCommentKey }) => {
+      success: () => {
         // There might be an issue regarding useOptimistic
         // showing stale data as described
         // here: https://github.com/vercel/next.js/issues/57662
-        setLocalComments(prev =>
-          prev.filter(comment => comment._key !== deletedCommentKey)
-        )
+        // setLocalComments(prev =>
+        //  prev.filter(comment => comment._key !== deletedCommentKey)
+        // )
         setIsPendingDelete(false)
+        router.push(`/post/${postID}?update=${new Date().valueOf()}`)
         return 'Comment deleted'
       },
       error: () => {
