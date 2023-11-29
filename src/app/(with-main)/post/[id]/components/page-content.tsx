@@ -1,18 +1,34 @@
 import Link from 'next/link'
+import { currentUser } from '@clerk/nextjs'
+import { PostActions } from './post-actions'
 import { LikedByBox } from './liked-by-box'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { client } from '@/lib/sanity/client'
 import { getPostQuery } from '@/lib/sanity/queries'
+import { parseUserID } from '@/lib/utils'
 import { type PostDetails } from '@/lib/sanity/types/post'
 
-export async function PostDetailsPageContent({ postID }: { postID: string }) {
-  const post = await client.fetch<PostDetails>(
-    getPostQuery(postID),
-    {},
-    {
-      cache: 'no-store'
-    }
-  )
+export async function PostDetailsPageContent({
+  postID,
+  isModal = false
+}: {
+  postID: string
+  isModal?: boolean
+}) {
+  const [post, user] = await Promise.all([
+    client.fetch<PostDetails>(
+      getPostQuery(postID),
+      {},
+      {
+        cache: 'no-store'
+      }
+    ),
+    currentUser()
+  ])
+
+  const loggedInUserID = parseUserID(user?.id as string)
+
+  const isPostByUser = post.postedBy._id === loggedInUserID
 
   return (
     <section className='relative flex flex-col gap-8 w-full max-w-5xl mx-auto'>
@@ -35,6 +51,7 @@ export async function PostDetailsPageContent({ postID }: { postID: string }) {
           src={post.image.asset.url}
           alt={post.title}
         />
+        {isPostByUser ? <PostActions isModal={isModal} /> : null}
       </header>
       <div className='flex flex-col gap-4'>
         <h1 className='font-bold'>{post.title}</h1>

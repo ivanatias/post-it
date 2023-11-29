@@ -15,7 +15,7 @@ export default function PostPageModal({
     <Modal>
       <div className='flex flex-col gap-6 px-6 py-10'>
         <Suspense fallback={<PostPageSkeleton />}>
-          <PostDetailsPageContent postID={params.id} />
+          <PostDetailsPageContent isModal postID={params.id} />
         </Suspense>
         {/*
           The solution below to update comments when a user deletes a comment 

@@ -11,7 +11,6 @@ import { postFormSchema, type PostFormSchema } from '@/lib/schemas/post-form'
 import { INITIAL_FORM_STATE } from '@/constants/forms'
 
 export interface UsePostForm {
-  action: 'create' | 'edit'
   loggedInUserID: string
   initialImageURL?: string
   initialTitle?: string
@@ -20,7 +19,6 @@ export interface UsePostForm {
 }
 
 export function usePostForm({
-  action,
   loggedInUserID,
   initialImageURL,
   initialTitle,
@@ -39,17 +37,7 @@ export function usePostForm({
     }
   })
 
-  const actionFn =
-    action === 'create'
-      ? createPost
-      : async () => {
-          return {
-            status: 'success',
-            message: 'Post created'
-          }
-        }
-
-  const [formState, formAction] = useFormState(actionFn, INITIAL_FORM_STATE)
+  const [formState, formAction] = useFormState(createPost, INITIAL_FORM_STATE)
 
   const isEditing = [
     initialImageURL,

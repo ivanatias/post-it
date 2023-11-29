@@ -120,7 +120,7 @@ export function PostForm(props: PostFormProps) {
                 <Select
                   name='category'
                   onValueChange={field.onChange}
-                  defaultValue=''
+                  defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
