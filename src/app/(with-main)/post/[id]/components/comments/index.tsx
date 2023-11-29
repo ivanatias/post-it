@@ -6,8 +6,8 @@ import { parseUserID } from '@/lib/utils'
 import { type Comment } from '@/lib/sanity/types/post'
 
 export async function Comments({ postID }: { postID: string }) {
-  const [{ comments }, user] = await Promise.all([
-    client.fetch<{ comments: Comment[] }>(
+  const [results, user] = await Promise.all([
+    client.fetch<{ comments: Comment[] } | null>(
       getPostCommentsQuery(postID),
       {},
       {
@@ -16,6 +16,10 @@ export async function Comments({ postID }: { postID: string }) {
     ),
     currentUser()
   ])
+
+  if (results === null) {
+    return null
+  }
 
   const loggedInUser = {
     id: parseUserID(user?.id as string),
@@ -27,5 +31,5 @@ export async function Comments({ postID }: { postID: string }) {
     image: user?.imageUrl as string
   }
 
-  return <CommentsBox comments={comments} loggedInUser={loggedInUser} />
+  return <CommentsBox comments={results.comments} loggedInUser={loggedInUser} />
 }

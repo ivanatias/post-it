@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { currentUser } from '@clerk/nextjs'
 import { PostActions } from './post-actions'
 import { LikedByBox } from './liked-by-box'
@@ -16,7 +17,7 @@ export async function PostDetailsPageContent({
   isModal?: boolean
 }) {
   const [post, user] = await Promise.all([
-    client.fetch<PostDetails>(
+    client.fetch<PostDetails | null>(
       getPostQuery(postID),
       {},
       {
@@ -25,6 +26,10 @@ export async function PostDetailsPageContent({
     ),
     currentUser()
   ])
+
+  if (post === null) {
+    notFound()
+  }
 
   const loggedInUserID = parseUserID(user?.id as string)
 
