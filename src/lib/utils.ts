@@ -72,3 +72,7 @@ export const formatTimeago = (timestamp: number) => {
   const { value, unit } = result
   return rtf.format(value, unit as Intl.RelativeTimeFormatUnit)
 }
+
+export const capitalize = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}

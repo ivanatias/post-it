@@ -8,7 +8,7 @@ import {
   getPostsByUserQuery,
   getSearchPostsQuery
 } from '@/lib/sanity/queries'
-import { parseUserID } from '@/lib/utils'
+import { parseUserID, capitalize } from '@/lib/utils'
 import type { Post } from '@/lib/sanity/types/post'
 
 type FeedProps =
@@ -32,7 +32,7 @@ export async function FeedServer(props: FeedProps) {
   let queryForFeed = ''
 
   if (props.type === 'category') {
-    queryForFeed = getPostsByCategoryQuery(props.category)
+    queryForFeed = getPostsByCategoryQuery(capitalize(props.category))
   }
 
   if (props.type === 'user') {

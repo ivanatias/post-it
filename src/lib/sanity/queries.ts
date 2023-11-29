@@ -72,7 +72,7 @@ export const getPostsByCategoryQuery = (
   category: string,
   postID: string = ''
 ) => {
-  return `*[_type == "post" && category == '${category}' && _id != '${postID}' ] | order(_createdAt desc) {
+  return `*[_type == "post" && category == '${category}' && _id != '${postID}'] | order(_createdAt desc) {
     image {
       asset -> {
         url
