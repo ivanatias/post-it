@@ -111,7 +111,12 @@ export function useComments({ comments, loggedInUser }: UseComments) {
         //  prev.filter(comment => comment._key !== deletedCommentKey)
         // )
         setIsPendingDelete(false)
-        router.replace(`/post/${postID}?update=${new Date().valueOf()}`)
+        // Using this workaround while the bug gets solved
+        // allowing for the possibility of using revalidation methods
+        // such as router.refresh(), revalidatePath(), etc.
+        router.replace(`/post/${postID}?update=${new Date().valueOf()}`, {
+          scroll: false
+        })
         return 'Comment deleted'
       },
       error: () => {
