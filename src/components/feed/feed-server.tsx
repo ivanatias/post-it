@@ -5,7 +5,8 @@ import { client } from '@/lib/sanity/client'
 import {
   getAllPostsQuery,
   getPostsByCategoryQuery,
-  getPostsByUserQuery
+  getPostsByUserQuery,
+  getSearchPostsQuery
 } from '@/lib/sanity/queries'
 import { parseUserID } from '@/lib/utils'
 import type { Post } from '@/lib/sanity/types/post'
@@ -24,7 +25,7 @@ type FeedProps =
     }
   | {
       type: 'search'
-      term: string
+      term?: string
     }
 
 export async function FeedServer(props: FeedProps) {
@@ -39,7 +40,7 @@ export async function FeedServer(props: FeedProps) {
   }
 
   if (props.type === 'search') {
-    queryForFeed = 'todo'
+    queryForFeed = getSearchPostsQuery(props.term)
   }
 
   if (props.type === 'main') {
@@ -53,15 +54,21 @@ export async function FeedServer(props: FeedProps) {
 
   return (
     <section>
-      <MasonryLayout>
-        {posts.map(post => (
-          <PostCard
-            post={post}
-            loggedInUserID={parseUserID(user?.id as string)}
-            key={post._id}
-          />
-        ))}
-      </MasonryLayout>
+      {posts.length > 0 ? (
+        <MasonryLayout>
+          {posts.map(post => (
+            <PostCard
+              post={post}
+              loggedInUserID={parseUserID(user?.id as string)}
+              key={post._id}
+            />
+          ))}
+        </MasonryLayout>
+      ) : (
+        <p className='text-white text-lg lg:text-xl text-center font-bold'>
+          No posts to show...
+        </p>
+      )}
     </section>
   )
 }

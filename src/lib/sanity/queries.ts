@@ -119,3 +119,28 @@ export const getPostsByUserQuery = (userID: string) => {
     },
   }`
 }
+
+export const getSearchPostsQuery = (term?: string) => {
+  return `*[_type == "post" && title match '${term}' || description match '${term}'] {
+    image {
+      asset -> {
+        url
+      }
+    },
+    _id,
+    title,
+    category,
+    postedBy -> {
+      _id,
+      userName,
+      image,
+      userTag,
+    },
+    saved[] {
+      _key,
+      postedBy -> {
+        _id,
+      }
+    },
+  }`
+}
