@@ -23,6 +23,7 @@ export function PostActions({ isModal = false }: { isModal?: boolean }) {
 
   const handleDeletePost = () => {
     setPendingDelete(true)
+
     toast.promise(deletePost(postID as string), {
       loading: 'Deleting post...',
       success: () => {
@@ -33,6 +34,7 @@ export function PostActions({ isModal = false }: { isModal?: boolean }) {
           router.push('/')
         }
         setPendingDelete(false)
+
         return 'Post deleted!'
       },
       error: () => {

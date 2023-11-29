@@ -22,7 +22,7 @@ export function CommentsBox({ comments, loggedInUser }: CommentsBoxProps) {
   } = useComments({ comments, loggedInUser })
 
   return (
-    <div className='flex flex-col gap-12 border border-border rounded-2xl p-6'>
+    <section className='flex flex-col gap-12 border border-border rounded-2xl p-6'>
       {optimisticComments.length === 0 ? (
         <p className='text-muted-foreground text-xs lg:text-sm'>
           There are no comments, be the first to comment something!
@@ -66,8 +66,8 @@ export function CommentsBox({ comments, loggedInUser }: CommentsBoxProps) {
               <div className='flex flex-col gap-3'>
                 <div
                   className={`bg-slate-800 text-white text-xs lg:text-sm rounded-3xl p-3 w-fit min-w-[60px]
-              ${item.sending ? 'animate-pulse' : ''}
-            `}
+                    ${item.sending ? 'animate-pulse' : ''}
+                  `}
                 >
                   {item.comment}
                 </div>
@@ -100,6 +100,6 @@ export function CommentsBox({ comments, loggedInUser }: CommentsBoxProps) {
         </div>
         <SubmitCommentButton />
       </form>
-    </div>
+    </section>
   )
 }

@@ -15,7 +15,7 @@ export const addNewComment = async (
   formData: FormData
 ): Promise<CommentActionResult> => {
   let actionResult: CommentActionResult = {
-    status: 'idle',
+    status: FORM_STATUS.IDLE,
     message: '',
     payload: []
   }
