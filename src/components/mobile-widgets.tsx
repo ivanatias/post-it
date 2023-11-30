@@ -40,7 +40,7 @@ interface MobileMenuProps {
 function MobileMenu({ closeMenu }: MobileMenuProps) {
   return (
     <div className='flex z-10 animate-fade-right animate-once animate-duration-300 animate-ease-in-out fixed top-0 left-0 lg:hidden w-full h-screen'>
-      <div className='relative flex flex-col flex-[0.6]'>
+      <div className='relative flex flex-col flex-[0.4]'>
         <button
           aria-label='Close menu'
           className='absolute right-5 top-7'
@@ -50,7 +50,7 @@ function MobileMenu({ closeMenu }: MobileMenuProps) {
         </button>
         <Sidebar closeSidebar={closeMenu} />
       </div>
-      <div className='bg-black/80 flex-[0.4]' />
+      <div className='bg-black/80 flex-[0.6]' />
     </div>
   )
 }

@@ -1,29 +1,50 @@
+import {
+  ComputerIcon,
+  TreePineIcon,
+  CarIcon,
+  PizzaIcon,
+  PlaneIcon,
+  DumbbellIcon,
+  PaintBucketIcon,
+  CatIcon,
+  ShuffleIcon
+} from 'lucide-react'
+
 export const categories = [
   {
-    name: 'Technology'
+    name: 'Technology',
+    icon: ComputerIcon
   },
   {
-    name: 'Animals'
+    name: 'Animals',
+    icon: CatIcon
   },
   {
-    name: 'Cars'
+    name: 'Cars',
+    icon: CarIcon
   },
   {
-    name: 'Food'
+    name: 'Food',
+    icon: PizzaIcon
   },
   {
-    name: 'Travel'
+    name: 'Travel',
+    icon: PlaneIcon
   },
   {
-    name: 'Sports'
+    name: 'Sports',
+    icon: DumbbellIcon
   },
   {
-    name: 'Nature'
+    name: 'Nature',
+    icon: TreePineIcon
   },
   {
-    name: 'Art'
+    name: 'Art',
+    icon: PaintBucketIcon
   },
   {
-    name: 'Other'
+    name: 'Other',
+    icon: ShuffleIcon
   }
 ]
