@@ -28,10 +28,11 @@ export const createPost = async ({
   userID: string
 }) => {
   const formData = new FormData()
-  formData.append('image', values.image)
-  formData.append('title', values.title)
-  formData.append('description', values.description as string)
-  formData.append('category', values.category)
+
+  for (const [key, value] of Object.entries(values)) {
+    formData.append(key, value)
+  }
+
   formData.append('userID', userID)
 
   const res = await fetch(`/api/posts`, {
