@@ -1,4 +1,5 @@
 import * as React from 'react'
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import * as LabelPrimitive from '@radix-ui/react-label'
 import { Slot } from '@radix-ui/react-slot'
 import {
@@ -23,6 +24,7 @@ type FormFieldContextValue<
 }
 
 const FormFieldContext = React.createContext<FormFieldContextValue>(
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   {} as FormFieldContextValue
 )
 
@@ -46,7 +48,7 @@ const useFormField = () => {
 
   const fieldState = getFieldState(fieldContext.name, formState)
 
-  if (!fieldContext) {
+  if (fieldContext === undefined) {
     throw new Error('useFormField should be used within <FormField>')
   }
 
@@ -67,6 +69,7 @@ type FormItemContextValue = {
 }
 
 const FormItemContext = React.createContext<FormItemContextValue>(
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   {} as FormItemContextValue
 )
 
@@ -93,6 +96,7 @@ const FormLabel = React.forwardRef<
   return (
     <Label
       ref={ref}
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       className={cn(error && 'text-destructive', className)}
       htmlFor={formItemId}
       {...props}
@@ -112,10 +116,12 @@ const FormControl = React.forwardRef<
       ref={ref}
       id={formItemId}
       aria-describedby={
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         !error
           ? `${formDescriptionId}`
           : `${formDescriptionId} ${formMessageId}`
       }
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       aria-invalid={!!error}
       {...props}
     />
@@ -145,8 +151,10 @@ const FormMessage = React.forwardRef<
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, children, ...props }, ref) => {
   const { error, formMessageId } = useFormField()
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   const body = error ? String(error?.message) : children
 
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   if (!body) {
     return null
   }
