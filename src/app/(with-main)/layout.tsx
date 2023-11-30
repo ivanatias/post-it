@@ -13,7 +13,7 @@ export default function Layout({
       <div className='hidden lg:flex'>
         <Sidebar />
       </div>
-      <div className='flex flex-col w-full h-screen max-w-7xl mx-auto px-6 lg:px-12'>
+      <div className='flex flex-col w-full h-screen max-w-7xl mx-auto px-7 lg:px-12'>
         <header>
           <Navbar />
         </header>
