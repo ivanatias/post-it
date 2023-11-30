@@ -1,33 +1,47 @@
 import { NextResponse } from 'next/server'
 import { client } from '@/lib/sanity/client'
 import { type SanityImageAssetDocument } from 'next-sanity'
-import { postFormSchema, type PostFormSchema } from '@/lib/schemas/post-form'
+import { type PostFormSchema } from '@/lib/schemas/post-form'
 
 export async function POST(request: Request) {
   const formData = await request.formData()
-  let parsedData: PostFormSchema
 
-  try {
-    parsedData = ensureSafePost(formData)
-  } catch {
+  const image = formData.get('image') as File | null
+  const title = formData.get('title') as string | null
+  const description = formData.get('description') as string | null
+  const category = formData.get('category') as string | null
+  const userID = formData.get('userID') as string | null
+
+  if (
+    image === null ||
+    title === null ||
+    description === null ||
+    category === null ||
+    userID === null
+  ) {
     return NextResponse.json({ success: false }, { status: 400 })
   }
 
   try {
-    const imageArrBuffer = await parsedData.image.arrayBuffer()
+    const imageArrBuffer = await image.arrayBuffer()
     const asset = await client.assets.upload(
       'image',
       Buffer.from(imageArrBuffer),
       {
-        filename: parsedData.image.name,
-        contentType: parsedData.image.type
+        filename: image.name,
+        contentType: image.type
       }
     )
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { image, ...restOfData } = parsedData
-    const userID = formData.get('userID') as string
-    await client.create(generateNewPostDoc({ ...restOfData, asset, userID }))
+    const dataForDoc = {
+      title,
+      description,
+      category,
+      userID,
+      asset
+    }
+
+    await client.create(generateNewPostDoc(dataForDoc))
 
     return NextResponse.json({ success: true })
   } catch {
@@ -48,17 +62,6 @@ export async function DELETE(request: Request) {
   } catch {
     return NextResponse.json({ success: false }, { status: 500 })
   }
-}
-
-function ensureSafePost(formData: FormData) {
-  const data = postFormSchema.parse({
-    image: formData.get('image'),
-    title: formData.get('title'),
-    description: formData.get('description'),
-    category: formData.get('category')
-  })
-
-  return data
 }
 
 function generateNewPostDoc(
