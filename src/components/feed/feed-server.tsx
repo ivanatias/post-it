@@ -6,6 +6,7 @@ import {
   getAllPostsQuery,
   getPostsByCategoryQuery,
   getPostsByUserQuery,
+  getPostsLikedByUserQuery,
   getSearchPostsQuery
 } from '@/lib/sanity/queries'
 import { parseUserID, capitalize } from '@/lib/utils'
@@ -27,9 +28,14 @@ type FeedProps =
       type: 'search'
       term?: string
     }
+  | {
+      type: 'likedByUser'
+      userID: string
+    }
 
 export async function FeedServer(props: FeedProps) {
   let queryForFeed = ''
+  let emptyFeedMsg = 'No posts to show...'
 
   if (props.type === 'category') {
     queryForFeed = getPostsByCategoryQuery(capitalize(props.category))
@@ -37,10 +43,16 @@ export async function FeedServer(props: FeedProps) {
 
   if (props.type === 'user') {
     queryForFeed = getPostsByUserQuery(props.userID)
+    emptyFeedMsg = 'No posts by this user'
   }
 
   if (props.type === 'search') {
     queryForFeed = getSearchPostsQuery(props.term)
+  }
+
+  if (props.type === 'likedByUser') {
+    queryForFeed = getPostsLikedByUserQuery(props.userID)
+    emptyFeedMsg = 'No posts liked by this user'
   }
 
   if (props.type === 'main') {
@@ -65,8 +77,14 @@ export async function FeedServer(props: FeedProps) {
           ))}
         </MasonryLayout>
       ) : (
-        <p className='text-white text-lg lg:text-xl text-center font-bold'>
-          No posts to show...
+        <p
+          className={`text-muted-foreground text-lg lg:text-xl font-semibold ${
+            props.type === 'user' || props.type === 'likedByUser'
+              ? 'text-left'
+              : 'text-center'
+          }`}
+        >
+          {emptyFeedMsg}
         </p>
       )}
     </section>

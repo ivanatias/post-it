@@ -120,6 +120,29 @@ export const getPostsByUserQuery = (userID: string) => {
   }`
 }
 
+export const getPostsLikedByUserQuery = (userID: string) => {
+  return `*[ _type == 'post' && '${userID}' in saved[].userId ] | order(_createdAt desc) {
+    image {
+      asset -> {
+        url
+      }
+    },
+    _id,
+    title,
+    postedBy -> {
+      _id,
+      userName,
+      image,
+      userTag,
+    },
+    saved[] {
+      postedBy -> {
+        _id,
+      },
+    },
+  }`
+}
+
 export const getSearchPostsQuery = (term?: string) => {
   return `*[_type == "post" && title match '${term}' || description match '${term}'] {
     image {
@@ -142,5 +165,14 @@ export const getSearchPostsQuery = (term?: string) => {
         _id,
       }
     },
+  }`
+}
+
+export const getUserInfoQuery = (userID: string) => {
+  return `*[_type == "user" && _id == '${userID}'][0]{
+    userName,
+    userTag,
+    image,
+    _id
   }`
 }
