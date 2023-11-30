@@ -4,14 +4,15 @@
 
 import { useFormState } from 'react-dom'
 import { useState, useEffect } from 'react'
+import { useUser } from '@clerk/nextjs'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createPost } from '../actions'
 import { postFormSchema, type PostFormSchema } from '@/lib/schemas/post-form'
+import { parseUserID } from '@/lib/utils'
 import { INITIAL_FORM_STATE } from '@/constants/forms'
 
 export interface UsePostForm {
-  loggedInUserID: string
   initialImageURL?: string
   initialTitle?: string
   initialDescription?: string
@@ -19,7 +20,6 @@ export interface UsePostForm {
 }
 
 export function usePostForm({
-  loggedInUserID,
   initialImageURL,
   initialTitle,
   initialDescription,
@@ -38,6 +38,8 @@ export function usePostForm({
   })
 
   const [formState, formAction] = useFormState(createPost, INITIAL_FORM_STATE)
+
+  const { user } = useUser()
 
   const isEditing = [
     initialImageURL,
@@ -66,7 +68,7 @@ export function usePostForm({
     const valid = await form.trigger()
 
     if (valid) {
-      formData.append('userID', loggedInUserID)
+      formData.append('userID', parseUserID(user?.id as string))
       formAction(formData)
     }
   }
