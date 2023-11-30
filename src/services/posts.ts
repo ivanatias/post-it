@@ -1,3 +1,5 @@
+import { type PostFormSchema } from '@/lib/schemas/post-form'
+
 export const togglePostLike = async ({
   postID,
   userID,
@@ -13,6 +15,28 @@ export const togglePostLike = async ({
     headers: {
       'Content-Type': 'application/json'
     }
+  })
+
+  if (!res.ok) throw new Error('Error performing action, try again.')
+}
+
+export const createPost = async ({
+  values,
+  userID
+}: {
+  values: PostFormSchema
+  userID: string
+}) => {
+  const formData = new FormData()
+  formData.append('image', values.image)
+  formData.append('title', values.title)
+  formData.append('description', values.description as string)
+  formData.append('category', values.category)
+  formData.append('userID', userID)
+
+  const res = await fetch(`/api/posts`, {
+    method: 'POST',
+    body: formData
   })
 
   if (!res.ok) throw new Error('Error performing action, try again.')

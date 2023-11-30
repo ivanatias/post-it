@@ -1,16 +1,12 @@
-// For some reason, use client must be used for this module
-// to avoid error of type: ReactServerComponentsError
-'use client'
-
-import { useFormState } from 'react-dom'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useUser } from '@clerk/nextjs'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createPost } from '../actions'
+import { createPost } from '@/services/posts'
 import { postFormSchema, type PostFormSchema } from '@/lib/schemas/post-form'
 import { parseUserID } from '@/lib/utils'
-import { INITIAL_FORM_STATE } from '@/constants/forms'
+import { toast } from 'sonner'
 
 export interface UsePostForm {
   initialImageURL?: string
@@ -26,6 +22,8 @@ export function usePostForm({
   initialCategory
 }: UsePostForm) {
   const [previewImageURL, setPreviewImageURL] = useState(initialImageURL ?? '')
+  const router = useRouter()
+  const { user } = useUser()
 
   const form = useForm<PostFormSchema>({
     resolver: zodResolver(postFormSchema),
@@ -36,10 +34,6 @@ export function usePostForm({
       category: initialCategory ?? ''
     }
   })
-
-  const [formState, formAction] = useFormState(createPost, INITIAL_FORM_STATE)
-
-  const { user } = useUser()
 
   const isEditing = [
     initialImageURL,
@@ -64,21 +58,33 @@ export function usePostForm({
     }
   }
 
-  const performAction = async (formData: FormData) => {
-    const valid = await form.trigger()
-
-    if (valid) {
-      formData.append('userID', parseUserID(user?.id as string))
-      formAction(formData)
-    }
-  }
+  const onSubmit = form.handleSubmit(async (values: PostFormSchema) => {
+    await new Promise(resolve => {
+      toast.promise(
+        createPost({ values, userID: parseUserID(user?.id as string) }),
+        {
+          loading: 'Creating post...',
+          success: () => {
+            form.reset()
+            setPreviewImageURL('')
+            router.push('/')
+            resolve(undefined)
+            return 'Post created!'
+          },
+          error: () => {
+            resolve(undefined)
+            return 'Could not create post, try again.'
+          }
+        }
+      )
+    })
+  })
 
   return {
     form,
     previewImageURL,
-    formState,
     isEditing,
-    performAction,
-    updatePreviewImageURL
+    updatePreviewImageURL,
+    onSubmit
   }
 }

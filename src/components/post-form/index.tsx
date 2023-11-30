@@ -18,23 +18,16 @@ import {
 } from '../ui/select'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
-import { SubmitButton } from './components/submit-btn'
+import { Button } from '../ui/button'
 import { usePostForm, type UsePostForm } from './hooks/use-post-form'
-import { FORM_STATUS } from '@/constants/forms'
 import { categories } from '@/constants/categories'
 import { ALLOWED_IMAGE_EXTENSIONS } from '@/constants/allowed-image-formats'
 
 type PostFormProps = UsePostForm
 
 export function PostForm(props: PostFormProps) {
-  const {
-    form,
-    formState,
-    performAction,
-    previewImageURL,
-    isEditing,
-    updatePreviewImageURL
-  } = usePostForm(props)
+  const { form, previewImageURL, isEditing, updatePreviewImageURL, onSubmit } =
+    usePostForm(props)
 
   return (
     <div className='flex flex-col items-center'>
@@ -54,7 +47,7 @@ export function PostForm(props: PostFormProps) {
         )}
       </div>
       <Form {...form}>
-        <form action={performAction} className='w-full flex flex-col gap-8'>
+        <form onSubmit={onSubmit} className='w-full flex flex-col gap-8'>
           {isEditing ? null : (
             <FormField
               control={form.control}
@@ -140,15 +133,13 @@ export function PostForm(props: PostFormProps) {
               </FormItem>
             )}
           />
-          <SubmitButton />
-          <p aria-live='polite' className='sr-only'>
-            {formState?.message}
-          </p>
-          {formState?.status === FORM_STATUS.ERROR && (
-            <p className='text-red-800 text-xs lg:text-sm'>
-              {formState?.message}
-            </p>
-          )}
+          <Button
+            className='disabled:opacity-70 disabled:cursor-not-allowed'
+            type='submit'
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? 'Creating post...' : 'Create post'}
+          </Button>
         </form>
       </Form>
     </div>
