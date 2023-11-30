@@ -68,6 +68,7 @@ export function usePostForm({
             form.reset()
             setPreviewImageURL('')
             router.push('/')
+            router.refresh()
             resolve(undefined)
             return 'Post created!'
           },
