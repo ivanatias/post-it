@@ -22,7 +22,8 @@ export const createPost = async (
   const userID = formData.get('userID') as string
 
   try {
-    const asset = await client.assets.upload('image', data.image, {
+    const imageData = await (data.image as File).arrayBuffer()
+    const asset = await client.assets.upload('image', Buffer.from(imageData), {
       filename: data.image.name,
       contentType: data.image.type
     })
