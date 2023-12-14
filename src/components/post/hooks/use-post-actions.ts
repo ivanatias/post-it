@@ -19,7 +19,7 @@ export function usePostActions({ userID, postID, saved }: UsePostActions) {
   })
 
   const handleToggleLikePost = () => {
-    const endpoint = postAlreadyLiked ? '/api/posts/unlike' : '/api/posts/like'
+    const action = postAlreadyLiked ? 'unlike' : 'like'
 
     const loadingMsg = postAlreadyLiked ? 'Unliking post...' : 'Liking post...'
     const successMsg = postAlreadyLiked ? 'Post unliked!' : 'Post liked!'
@@ -29,7 +29,7 @@ export function usePostActions({ userID, postID, saved }: UsePostActions) {
 
     setDoingAction(true)
 
-    toast.promise(togglePostLike({ postID, userID, endpoint }), {
+    toast.promise(togglePostLike({ postID, userID, action }), {
       loading: loadingMsg,
       success: () => {
         startTransition(() => {
