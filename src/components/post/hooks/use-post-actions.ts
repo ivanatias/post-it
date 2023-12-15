@@ -20,9 +20,9 @@ export function usePostActions({ userID, postID, saved }: UsePostActions) {
 
   const handleToggleLikePost = () => {
     const action = postAlreadyLiked ? 'unlike' : 'like'
-
     const loadingMsg = postAlreadyLiked ? 'Unliking post...' : 'Liking post...'
     const successMsg = postAlreadyLiked ? 'Post unliked!' : 'Post liked!'
+
     const errorMsg = `Could not ${
       postAlreadyLiked ? 'unlike' : 'like'
     } post due to error, try again.`
