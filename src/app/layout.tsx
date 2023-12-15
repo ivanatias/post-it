@@ -1,11 +1,14 @@
 import type { Metadata } from 'next'
-import { Montserrat } from 'next/font/google'
+import { Open_Sans } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { Toaster } from 'sonner'
 import { dark } from '@clerk/themes'
 import './globals.css'
 
-const montserrat = Montserrat({ subsets: ['latin'], weight: ['400', '600'] })
+const opensans = Open_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '600', '700']
+})
 
 export const metadata: Metadata = {
   title: 'Post it',
@@ -19,15 +22,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en' className='dark'>
-      <body className={`${montserrat.className} overflow-y-hidden`}>
+      <body className={`${opensans.className} overflow-y-hidden`}>
         <ClerkProvider
           appearance={{
             baseTheme: dark,
             variables: {
-              colorPrimary: 'red',
-              colorBackground: '#0C090A',
-              fontSize: '20px',
-              fontFamily: 'Montserrat'
+              colorPrimary: '#dc2626',
+              colorInputBackground: '#0f172a',
+              colorBackground: '#0f172a',
+              fontSize: '16px',
+              fontFamily: 'Open Sans'
             }
           }}
         >
