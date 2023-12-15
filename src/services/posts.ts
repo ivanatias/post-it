@@ -3,14 +3,16 @@ import { type PostFormSchema } from '@/lib/schemas/post-form'
 export const togglePostLike = async ({
   postID,
   userID,
-  endpoint
+  action
 }: {
   postID: string
   userID: string
-  endpoint: '/api/posts/like' | '/api/posts/unlike'
+  action: 'like' | 'unlike'
 }) => {
+  const endpoint = `/api/posts/likes?action=${action}`
+
   const res = await fetch(endpoint, {
-    method: 'POST',
+    method: 'PATCH',
     body: JSON.stringify({ postID, userID }),
     headers: {
       'Content-Type': 'application/json'
