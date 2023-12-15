@@ -8,5 +8,5 @@ export function UserAuthButton() {
 
   if (!isLoaded) return <Spinner />
 
-  return <UserButton afterSignOutUrl='/login' />
+  return <UserButton afterSignOutUrl='/sign-in' />
 }

@@ -1,18 +1,18 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { SignIn } from '@clerk/nextjs'
+import { SignIn, SignUp } from '@clerk/nextjs'
 
-export function SignInBox() {
-  const [showSignIn, setShowSignIn] = useState(false)
+export function AuthBox({ mode }: { mode: 'sign-in' | 'sign-up' }) {
+  const [showBox, setShowBox] = useState(false)
 
   useEffect(() => {
     setTimeout(() => {
-      setShowSignIn(true)
-    }, 1200)
+      setShowBox(true)
+    }, 1000)
   }, [])
 
-  if (!showSignIn) {
+  if (!showBox) {
     return (
       <img
         src='/logo.svg'
@@ -24,5 +24,5 @@ export function SignInBox() {
     )
   }
 
-  return <SignIn />
+  return mode === 'sign-in' ? <SignIn /> : <SignUp />
 }
