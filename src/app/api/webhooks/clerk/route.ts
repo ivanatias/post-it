@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     if (err instanceof Error) {
       console.error(`Error verifying webhook: ${err.message}`)
       return NextResponse.json(
-        { message: `Error verifying webhook: ${err.message}` },
+        { message: 'Error verifying webhook' },
         { status: 400 }
       )
     }
