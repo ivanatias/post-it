@@ -40,6 +40,7 @@ export const formatLikedBy = (data: Pick<PostDetails, 'saved'>['saved']) => {
 export const formatTimeago = (timestamp: number) => {
   const DATE_UNITS_SECONDS = {
     year: 3.154e7,
+    month: 2.628e6,
     day: 86400,
     hour: 3600,
     minute: 60,
