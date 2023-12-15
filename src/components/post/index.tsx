@@ -41,8 +41,8 @@ export function PostCard({ post, loggedInUserID }: PostCardProps) {
 
   return (
     <article
-      className={`flex flex-col gap-5 border cursor-pointer border-slate-700 bg-slate-900 p-3 rounded-xl
-      ${doingAction ? 'animate-pulse' : ''} hover:bg-slate-950 transition
+      className={`flex flex-col gap-5 border cursor-pointer border-slate-700 bg-slate-800 p-3 rounded-xl
+      ${doingAction ? 'animate-pulse' : ''} hover:bg-slate-900 transition-colors
     `}
       onClick={() => {
         router.push(`/post/${post._id}`)

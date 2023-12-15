@@ -9,7 +9,7 @@ export default function PostPageModalLayout({
 }) {
   return (
     <Modal>
-      <section className='flex flex-col gap-6 p-10'>
+      <section className='flex flex-col gap-6 py-8 px-4 lg:px-8 bg-background'>
         {children}
         {comments}
       </section>

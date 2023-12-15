@@ -6,7 +6,7 @@ import { PlusIcon, SearchIcon } from 'lucide-react'
 
 export function Navbar() {
   return (
-    <nav className='relative flex items-center justify-between w-full gap-3 py-3'>
+    <nav className='relative flex items-center justify-between w-full gap-3 py-3 lg:py-6'>
       <Link href='/'>
         <img src='/logo.svg' alt='Post it logo' width={140} height={80} />
       </Link>

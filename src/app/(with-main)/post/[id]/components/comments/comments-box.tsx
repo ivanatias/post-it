@@ -28,12 +28,12 @@ export function CommentsBox({ comments, loggedInUser }: CommentsBoxProps) {
           There are no comments, be the first to comment something!
         </p>
       ) : (
-        <div
+        <ul
           ref={commentsBoxRef}
           className='flex flex-col gap-5 max-h-[500px] overflow-y-auto'
         >
           {optimisticComments.map(item => (
-            <div key={item._key} className='flex flex-col gap-4'>
+            <li key={item._key} className='flex flex-col gap-4'>
               <div className='flex items-center gap-2'>
                 <Avatar className='w-8 h-8'>
                   <AvatarImage
@@ -75,9 +75,9 @@ export function CommentsBox({ comments, loggedInUser }: CommentsBoxProps) {
                   {formatTimeago(new Date(item.createdAt).getTime())}
                 </time>
               </div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
       <form
         className='flex flex-col gap-5 sm:flex-row sm:gap-3 w-full'

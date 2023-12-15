@@ -40,7 +40,7 @@ export function useComments({ comments, loggedInUser }: UseComments) {
   const { id: postID } = useParams()
 
   const commentsFormRef = useRef<ElementRef<'form'>>(null)
-  const commentsBoxRef = useRef<ElementRef<'div'>>(null)
+  const commentsBoxRef = useRef<ElementRef<'ul'>>(null)
   const commentsInputRef = useRef<ElementRef<'textarea'>>(null)
 
   useEffect(() => {

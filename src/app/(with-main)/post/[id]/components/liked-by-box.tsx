@@ -19,26 +19,25 @@ export function LikedByBox({ liked }: { liked: PostDetails['saved'] }) {
   return (
     <>
       <div
-        className='flex items-center gap-3 cursor-pointer'
+        className='flex items-center gap-3 cursor-pointer text-muted-foreground hover:text-slate-300 transition-colors'
         onClick={() => {
           setShowBox(true)
         }}
       >
-        <div className='flex items-center'>
+        <ul className='flex items-center'>
           {sliced.map((saved, index) => (
-            <Avatar
-              key={saved._key}
-              className={`w-8 h-8 ${index > 0 ? '-ml-2' : ''}`}
-            >
-              <AvatarImage
-                className='object-cover'
-                src={saved.postedBy.image}
-              />
-              <AvatarFallback>{saved.postedBy.userName}</AvatarFallback>
-            </Avatar>
+            <li key={saved._key}>
+              <Avatar className={`w-8 h-8 ${index > 0 ? '-ml-2' : ''}`}>
+                <AvatarImage
+                  className='object-cover'
+                  src={saved.postedBy.image}
+                />
+                <AvatarFallback>{saved.postedBy.userName}</AvatarFallback>
+              </Avatar>
+            </li>
           ))}
-        </div>
-        <div className='text-xs font-light'>{likedByText}</div>
+        </ul>
+        <p className='text-xs font-light'>{likedByText}</p>
       </div>
       {showBox && (
         <div className='fixed flex flex-col gap-5 bg-slate-900 border border-border rounded-2xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>

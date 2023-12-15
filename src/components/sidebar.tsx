@@ -37,7 +37,7 @@ export function Sidebar({ closeSidebar }: { closeSidebar?: () => void }) {
   const parsedUserID = isLoaded ? parseUserID(user?.id as string) : ''
 
   return (
-    <aside className='text-slate-300 flex-col items-center border-r lg:border-r-slate-800 border-r-slate-700 w-full h-full lg:p-8 overflow-y-auto shadow-md hide-scrollbar lg:bg-slate-950/30 bg-slate-950 lg:h-screen lg:w-56 lg:justify-start'>
+    <aside className='text-slate-300 flex-col items-center border-r bg-slate-900 border-r-slate-800 w-full h-full lg:px-8 lg:py-3 p-8 overflow-y-auto shadow-md lg:h-screen lg:w-56 lg:justify-start'>
       <div className='flex items-center justify-center h-24 mb-5'>
         {isLoaded ? (
           <NavLink href={`/user/${parsedUserID}`} closeSidebar={closeSidebar}>
@@ -66,19 +66,22 @@ export function Sidebar({ closeSidebar }: { closeSidebar?: () => void }) {
           Home
         </NavLink>
         <div className='mt-5 flex flex-col w-full gap-4'>
-          <h2 className='font-bold text-white text-lg lg:text-xl'>Discover</h2>
-          <div className='flex flex-col w-full gap-3 font-semibold text-xs lg:text-sm'>
+          <h2 className='font-bold text-white text-base lg:text-lg'>
+            Discover
+          </h2>
+          <ul className='flex flex-col w-full gap-3 font-semibold text-xs lg:text-sm'>
             {categories.map(({ name, icon: Icon }) => (
-              <NavLink
-                key={name}
-                href={`/category/${name.toLowerCase()}`}
-                closeSidebar={closeSidebar}
-              >
-                <Icon className='w-4 h-4' />
-                {name}
-              </NavLink>
+              <li key={name}>
+                <NavLink
+                  href={`/category/${name.toLowerCase()}`}
+                  closeSidebar={closeSidebar}
+                >
+                  <Icon className='w-4 h-4' />
+                  {name}
+                </NavLink>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </div>
     </aside>
