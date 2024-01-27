@@ -1,23 +1,20 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { client } from '@/lib/sanity/client'
 import { FORM_STATUS, type FormStatus } from '@/constants/forms'
-import { getPostCommentsQuery } from '@/lib/sanity/queries'
-import { type Comment } from '@/lib/sanity/types/post'
 
 type CommentActionResult = {
   status: FormStatus
   message: string
-  payload: Comment[]
 }
 
-export const addNewComment = async (
+export const addCommentToPost = async (
   formData: FormData
 ): Promise<CommentActionResult> => {
   let actionResult: CommentActionResult = {
     status: FORM_STATUS.IDLE,
-    message: '',
-    payload: []
+    message: ''
   }
   const comment = formData.get('comment') as string
   const postID = formData.get('postID') as string
@@ -40,26 +37,49 @@ export const addNewComment = async (
       ])
       .commit()
 
-    const { comments } = await client.fetch(
-      getPostCommentsQuery(postID),
-      {},
-      {
-        cache: 'no-store'
-      }
-    )
-
     actionResult = {
       status: FORM_STATUS.SUCCESS,
-      message: 'Comment added',
-      payload: comments as Comment[]
+      message: 'Comment added'
     }
   } catch {
     actionResult = {
       status: FORM_STATUS.ERROR,
-      message: 'Something went wrong adding comment',
-      payload: []
+      message: 'Something went wrong adding comment'
     }
   }
 
+  revalidatePath(`/post/${postID}`)
+  return actionResult
+}
+
+export const deleteCommentFromPost = async (
+  formData: FormData
+): Promise<CommentActionResult> => {
+  let actionResult: CommentActionResult = {
+    status: FORM_STATUS.IDLE,
+    message: ''
+  }
+
+  const postID = formData.get('postID') as string
+  const commentKey = formData.get('commentKey') as string
+
+  try {
+    await client
+      .patch(postID)
+      .unset([`comments[_key== "${commentKey}"]`])
+      .commit()
+
+    actionResult = {
+      status: FORM_STATUS.SUCCESS,
+      message: 'Comment deleted'
+    }
+  } catch {
+    actionResult = {
+      status: FORM_STATUS.ERROR,
+      message: 'Something went wrong deleting comment'
+    }
+  }
+
+  revalidatePath(`/post/${postID}`)
   return actionResult
 }
