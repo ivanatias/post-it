@@ -12,9 +12,7 @@ type CommentsBoxProps = UseComments
 export function CommentsBox({ comments, loggedInUser }: CommentsBoxProps) {
   const {
     optimisticComments,
-    isPendingDelete,
-    postID,
-    commentFormAction,
+    addComment,
     deleteComment,
     commentsBoxRef,
     commentsFormRef,
@@ -48,25 +46,23 @@ export function CommentsBox({ comments, loggedInUser }: CommentsBoxProps) {
                   {item.postedBy.userTag}
                 </p>
                 {item.postedBy._id === loggedInUser.id && (
-                  <button
-                    onClick={() => {
-                      deleteComment({
-                        commentKey: item._key,
-                        postID: postID as string
-                      })
-                    }}
-                    aria-label='Delete comment'
-                    disabled={item.sending || isPendingDelete}
-                    className='disabled:opacity-70 disabled:cursor-not-allowed'
-                  >
-                    <Trash className='w-4 h-4 text-red-500' />
-                  </button>
+                  <form action={deleteComment}>
+                    <input type='hidden' name='commentKey' value={item._key} />
+                    <button
+                      className='disabled:opacity-70 disabled:cursor-not-allowed'
+                      type='submit'
+                      aria-label='Delete comment'
+                      disabled={item.sending}
+                    >
+                      <Trash className='w-4 h-4 text-red-500' />
+                    </button>
+                  </form>
                 )}
               </div>
               <div className='flex flex-col gap-3'>
                 <div
                   className={`bg-slate-800 text-white text-xs lg:text-sm rounded-3xl p-3 w-fit min-w-[60px]
-                    ${item.sending ? 'animate-pulse' : ''}
+                    ${item.sending === true ? 'animate-pulse' : ''}
                   `}
                 >
                   {item.comment}
@@ -82,7 +78,7 @@ export function CommentsBox({ comments, loggedInUser }: CommentsBoxProps) {
       <form
         className='flex flex-col gap-5 sm:flex-row sm:gap-3 w-full'
         ref={commentsFormRef}
-        action={commentFormAction}
+        action={addComment}
       >
         <div className='flex flex-1 flex-shrink-0 items-center gap-4'>
           <Avatar className='w-6 h-6'>

@@ -1,13 +1,6 @@
-import {
-  useState,
-  useEffect,
-  useOptimistic,
-  useRef,
-  type ElementRef
-} from 'react'
-import { useParams, useRouter } from 'next/navigation'
-import { addNewComment } from '../actions'
-import { deleteCommentFromPost } from '@/services/posts'
+import { useEffect, useOptimistic, useRef, type ElementRef } from 'react'
+import { useParams } from 'next/navigation'
+import { addCommentToPost, deleteCommentFromPost } from '../actions'
 import { toast } from 'sonner'
 import { type Comment } from '@/lib/sanity/types/post'
 
@@ -22,21 +15,38 @@ export interface UseComments {
 }
 
 type OptimisticComment = Comment & {
-  sending: boolean
+  sending?: boolean
+}
+
+const ACTIONS = {
+  ADD: (comments: OptimisticComment[], newComment: Comment) => {
+    return [...comments, { ...newComment, sending: true }]
+  },
+  DELETE: (comments: OptimisticComment[], commentToDelete: Comment) => {
+    return comments.filter(comment => comment._key !== commentToDelete._key)
+  }
+} as const
+
+type Action = keyof typeof ACTIONS
+
+type CommentsAction = {
+  type: Action
+  payload: Comment
+}
+
+const commentsReducer = (
+  state: OptimisticComment[],
+  action: CommentsAction
+) => {
+  const { type, payload } = action
+  return ACTIONS[type](state, payload)
 }
 
 export function useComments({ comments, loggedInUser }: UseComments) {
-  const [localComments, setLocalComments] = useState(comments)
-  const [isPendingDelete, setIsPendingDelete] = useState(false)
-
-  const [optimisticComments, addOptimisticComment] = useOptimistic(
-    localComments as OptimisticComment[],
-    (oldComments, newComment: OptimisticComment) => {
-      return [...oldComments, newComment]
-    }
+  const [optimisticComments, dispatch] = useOptimistic(
+    comments,
+    commentsReducer
   )
-
-  const router = useRouter()
   const { id: postID } = useParams()
 
   const commentsFormRef = useRef<ElementRef<'form'>>(null)
@@ -52,12 +62,12 @@ export function useComments({ comments, loggedInUser }: UseComments) {
     }
   }, [optimisticComments])
 
-  const commentFormAction = async (formData: FormData) => {
+  const addComment = async (formData: FormData) => {
     const commentText = formData.get('comment') as string
 
     if (commentText.trim() === '') return
 
-    const newComment: OptimisticComment = {
+    const newComment: Comment = {
       _key: crypto.randomUUID(),
       comment: commentText,
       createdAt: new Date().toISOString(),
@@ -66,74 +76,45 @@ export function useComments({ comments, loggedInUser }: UseComments) {
         image: loggedInUser.image,
         userName: loggedInUser.fullUsername,
         userTag: loggedInUser.userTag
-      },
-      sending: true
+      }
     }
 
-    addOptimisticComment(newComment)
+    dispatch({ type: 'ADD', payload: newComment })
     commentsFormRef.current?.reset()
 
     formData.append('postID', postID as string)
     formData.append('userID', loggedInUser.id)
 
-    // The idea here is to use router.refresh() or revalidatePath
-    // from the server action to update the new optimistic comments array.
-    // However, it seems there is a bug concerning router.refresh() and revalidatePath
-    // when used with parallel + intercepting routes
-    // as described here: https://github.com/vercel/next.js/issues/54173
-
-    const { status, message, payload } = await addNewComment(formData)
+    const { status, message } = await addCommentToPost(formData)
     const toastFn = status === 'success' ? toast.success : toast.error
-
-    if (status === 'success') {
-      setLocalComments(payload)
-    }
-
     toastFn(message)
   }
 
-  const deleteComment = ({
-    commentKey,
-    postID
-  }: {
-    commentKey: string
-    postID: string
-  }) => {
-    setIsPendingDelete(true)
+  const deleteComment = async (formData: FormData) => {
+    const commentKey = formData.get('commentKey')
+    const toDelete = optimisticComments.find(
+      comment => comment._key === commentKey
+    )
 
-    toast.promise(deleteCommentFromPost({ commentKey, postID }), {
-      loading: 'Deleting comment...',
-      success: () => {
-        // There might be an issue regarding useOptimistic
-        // showing stale data as described
-        // here: https://github.com/vercel/next.js/issues/57662
-        // setLocalComments(prev =>
-        //  prev.filter(comment => comment._key !== deletedCommentKey)
-        // )
-        setIsPendingDelete(false)
-        // Using this workaround while the bug gets solved
-        // allowing for the possibility of using revalidation methods
-        // such as router.refresh(), revalidatePath(), etc.
-        router.replace(`/post/${postID}?update=${new Date().valueOf()}`, {
-          scroll: false
-        })
-        return 'Comment deleted'
-      },
-      error: () => {
-        setIsPendingDelete(false)
-        return 'Failed to delete comment'
-      }
-    })
+    if (toDelete === undefined) throw new Error('Comment not found')
+    // It seems useOptimistic's dispatch fn only works properly within a server action.
+    // That's why the comment items' delete buttons in comments-box.tsx
+    // are being wrapped in a form element with an input of type hidden
+    // holding the value of the comment's to delete key
+    dispatch({ type: 'DELETE', payload: toDelete })
+    formData.append('postID', postID as string)
+
+    const { status, message } = await deleteCommentFromPost(formData)
+
+    if (status === 'error') toast.error(message)
   }
 
   return {
     optimisticComments,
-    isPendingDelete,
     commentsFormRef,
     commentsBoxRef,
     commentsInputRef,
-    postID,
-    commentFormAction,
+    addComment,
     deleteComment
   }
 }
