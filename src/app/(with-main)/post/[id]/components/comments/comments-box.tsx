@@ -1,11 +1,11 @@
 'use client'
 
 import { SubmitCommentButton } from './submit-btn'
+import { Timeago } from '@/components/time-ago'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Textarea } from '@/components/ui/textarea'
 import { Trash } from 'lucide-react'
 import { useComments, type UseComments } from '../../hooks/use-comments'
-import { formatTimeago } from '@/lib/utils'
 
 type CommentsBoxProps = UseComments
 
@@ -68,7 +68,7 @@ export function CommentsBox({ comments, loggedInUser }: CommentsBoxProps) {
                   {item.comment}
                 </div>
                 <time className='text-xs text-muted-foreground'>
-                  {formatTimeago(new Date(item.createdAt).getTime())}
+                  <Timeago date={new Date(item.createdAt)} />
                 </time>
               </div>
             </li>
