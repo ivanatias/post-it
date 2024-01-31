@@ -74,6 +74,19 @@ export const formatTimeago = (timestamp: number) => {
   return rtf.format(value, unit as Intl.RelativeTimeFormatUnit)
 }
 
+export const createImageFileFromURL = async (
+  imageURL: string
+): Promise<File> => {
+  const imageName = imageURL.slice(imageURL.lastIndexOf('/') + 1)
+  const imageExt = imageName.slice(imageName.lastIndexOf('.') + 1)
+
+  const res = await fetch(imageURL)
+  if (!res.ok) throw new Error('Error transforming image into file.')
+  const blob = await res.blob()
+
+  return new File([blob], imageName, { type: `image/${imageExt}` })
+}
+
 export const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }

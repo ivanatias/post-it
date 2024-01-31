@@ -64,6 +64,30 @@ export async function DELETE(request: Request) {
   }
 }
 
+export async function PATCH(request: Request) {
+  const { title, description, category, postID } = await request.json()
+
+  if (
+    title === undefined ||
+    description === undefined ||
+    category === undefined ||
+    postID === undefined ||
+    typeof title !== 'string' ||
+    typeof description !== 'string' ||
+    typeof category !== 'string' ||
+    typeof postID !== 'string'
+  ) {
+    return NextResponse.json({ success: false }, { status: 400 })
+  }
+
+  try {
+    await client.patch(postID).set({ title, description, category }).commit()
+    return NextResponse.json({ success: true })
+  } catch {
+    return NextResponse.json({ success: false }, { status: 500 })
+  }
+}
+
 function generateNewPostDoc(
   data: Omit<PostFormSchema, 'image'> & {
     userID: string

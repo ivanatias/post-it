@@ -6,9 +6,9 @@ export default function PostDetailsPageLayout({
   comments: React.ReactNode
 }) {
   return (
-    <section className='flex flex-col gap-6'>
+    <section className='flex flex-col gap-6 max-w-5xl mx-auto'>
       {children}
-      <div className='px-10'>{comments}</div>
+      {comments}
     </section>
   )
 }

@@ -36,7 +36,7 @@ export async function PostDetailsPageContent({
   const isPostByUser = post.postedBy._id === loggedInUserID
 
   return (
-    <section className='relative flex flex-col gap-8 w-full max-w-5xl mx-auto'>
+    <section className='relative flex flex-col gap-8'>
       <header className='flex flex-col gap-4 items-center w-full'>
         <div className='flex items-center justify-center gap-3 text-lg lg:text-xl font-bold'>
           <p>Posted by</p>
@@ -56,9 +56,17 @@ export async function PostDetailsPageContent({
           src={post.image.asset.url}
           alt={post.title}
         />
-        {isPostByUser ? <PostActions isModal={isModal} /> : null}
+        {isPostByUser && (
+          <PostActions
+            initialTitle={post.title}
+            initialDescription={post.description}
+            initialCategory={post.category}
+            initialImageURL={post.image.asset.url}
+            isModal={isModal}
+          />
+        )}
       </header>
-      <div className='flex flex-col gap-4'>
+      <div className='flex flex-col gap-4 w-full'>
         <h1 className='font-bold'>{post.title}</h1>
         <p className='text-slate-300 font-light'>{post.description}</p>
         <div className='w-fit px-4 py-2 bg-slate-800 rounded-lg text-white font-semibold text-xs'>

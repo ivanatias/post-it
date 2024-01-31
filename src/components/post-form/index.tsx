@@ -1,5 +1,10 @@
 'use client'
 
+import { PreviewImage } from './components/preview-image'
+import {
+  RetrievingImage,
+  ErrorRetrievingImage
+} from './components/image-status'
 import {
   Form,
   FormControl,
@@ -21,58 +26,68 @@ import { Textarea } from '../ui/textarea'
 import { Button } from '../ui/button'
 import { usePostForm, type UsePostForm } from './hooks/use-post-form'
 import { categories } from '@/constants/categories'
-import { ALLOWED_IMAGE_EXTENSIONS } from '@/constants/allowed-image-formats'
 
-type PostFormProps = UsePostForm
+export type PostFormProps = UsePostForm
 
 export function PostForm(props: PostFormProps) {
-  const { form, previewImageURL, isEditing, updatePreviewImageURL, onSubmit } =
-    usePostForm(props)
+  const {
+    form,
+    previewImageURL,
+    isEditing,
+    downloadingImage,
+    downloadImageError,
+    idleMsg,
+    pendingMsg,
+    isSubmitting,
+    updatePreviewImageURL,
+    toggleRetryImageDownload,
+    onSubmit
+  } = usePostForm(props)
+
+  const isRetrievingImage = isEditing && downloadingImage
+  const isErrorImage = downloadImageError !== '' && !downloadingImage
+  const buttonText = isSubmitting ? pendingMsg : idleMsg
 
   return (
-    <div className='flex flex-col items-center'>
-      <div className='border border-border w-full max-w-lg h-80 rounded-md p-4'>
-        {previewImageURL !== '' ? (
-          <img
-            src={previewImageURL}
-            alt='Preview image for post'
-            className='w-full h-full object-cover rounded-[11px]'
-          />
-        ) : (
-          <div className='grid place-content-center gap-3 w-full h-full text-xs lg:text-sm text-center text-muted-foreground'>
-            <p className='font-semibold'>Upload an image for your post</p>
-            <p>Accepted formats: {ALLOWED_IMAGE_EXTENSIONS}</p>
-            <p className='underline'>Maximum size of 15 MB</p>
-          </div>
-        )}
-      </div>
+    <div className='flex flex-col items-center gap-5'>
+      <PreviewImage previewImageURL={previewImageURL} />
       <Form {...form}>
-        <form onSubmit={onSubmit} className='w-full flex flex-col gap-8'>
-          {isEditing ? null : (
-            <FormField
-              control={form.control}
-              name='image'
-              render={({ field }) => (
-                <FormItem className='max-w-sm'>
-                  <FormLabel>Image</FormLabel>
-                  <FormControl>
-                    <Input
-                      name='image'
-                      type='file'
-                      className='cursor-pointer'
-                      onChange={e => {
-                        const file = e.target.files?.[0]
-                        field.onChange(file)
-                        updatePreviewImageURL(file)
-                      }}
-                    />
-                  </FormControl>
-                  <FormDescription>The image for your post</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className='w-full flex flex-col gap-8'
+        >
+          <div className='flex flex-col gap-3 mt-2'>
+            {isRetrievingImage && <RetrievingImage />}
+            {isErrorImage && (
+              <ErrorRetrievingImage
+                downloadImageError={downloadImageError}
+                toggleRetryImageDownload={toggleRetryImageDownload}
+              />
+            )}
+          </div>
+          <FormField
+            control={form.control}
+            name='image'
+            render={({ field }) => (
+              <FormItem className='max-w-sm'>
+                <FormLabel>Image</FormLabel>
+                <FormControl>
+                  <Input
+                    name='image'
+                    type='file'
+                    className={`${isEditing ? 'hidden' : ''} cursor-pointer`}
+                    onChange={e => {
+                      const file = e.target.files?.[0]
+                      field.onChange(file)
+                      updatePreviewImageURL(file)
+                    }}
+                  />
+                </FormControl>
+                <FormDescription>The image for your post</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name='title'
@@ -136,9 +151,9 @@ export function PostForm(props: PostFormProps) {
           <Button
             className='disabled:opacity-70 disabled:cursor-not-allowed'
             type='submit'
-            disabled={form.formState.isSubmitting}
+            disabled={isSubmitting}
           >
-            {form.formState.isSubmitting ? 'Creating post...' : 'Create post'}
+            {buttonText}
           </Button>
         </form>
       </Form>

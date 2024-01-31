@@ -45,6 +45,24 @@ export const createPost = async ({
   if (!res.ok) throw new Error('Error performing action, try again.')
 }
 
+export const editPost = async ({
+  values,
+  postID
+}: {
+  values: PostFormSchema
+  postID: string
+}) => {
+  const res = await fetch(`/api/posts`, {
+    method: 'PATCH',
+    body: JSON.stringify({ ...values, postID }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+
+  if (!res.ok) throw new Error('Error performing action, try again.')
+}
+
 export const deletePost = async (postID: string) => {
   const res = await fetch(`/api/posts`, {
     method: 'DELETE',
