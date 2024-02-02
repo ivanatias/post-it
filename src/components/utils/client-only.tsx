@@ -1,24 +1,14 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useClientOnly } from '@/hooks/use-client-only'
 
 interface ClientOnlyProps {
   children: React.ReactNode
-  mountAfterMs?: number
+  fallback?: React.ReactNode
 }
 
-export function ClientOnly({ children, mountAfterMs }: ClientOnlyProps) {
-  const [mounted, setMounted] = useState(false)
+export function ClientOnly({ children, fallback }: ClientOnlyProps) {
+  const isClient = useClientOnly()
 
-  useEffect(() => {
-    if (mountAfterMs !== undefined) {
-      setTimeout(() => {
-        setMounted(true)
-      }, mountAfterMs)
-    }
-
-    setMounted(true)
-  }, [mountAfterMs])
-
-  return mounted ? <>{children}</> : null
+  return isClient ? <>{children}</> : <>{fallback ?? null}</>
 }
