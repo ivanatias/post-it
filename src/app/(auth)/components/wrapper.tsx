@@ -1,18 +1,17 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { SignIn, SignUp } from '@clerk/nextjs'
 
-export function AuthBox({ mode }: { mode: 'sign-in' | 'sign-up' }) {
-  const [showBox, setShowBox] = useState(false)
+export function Wrapper({ children }: { children: React.ReactNode }) {
+  const [showChild, setShowChild] = useState(false)
 
   useEffect(() => {
     setTimeout(() => {
-      setShowBox(true)
+      setShowChild(true)
     }, 1000)
   }, [])
 
-  if (!showBox) {
+  if (!showChild) {
     return (
       <img
         src='/logo.svg'
@@ -24,5 +23,5 @@ export function AuthBox({ mode }: { mode: 'sign-in' | 'sign-up' }) {
     )
   }
 
-  return mode === 'sign-in' ? <SignIn /> : <SignUp />
+  return <>{children}</>
 }

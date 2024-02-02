@@ -1,5 +1,5 @@
-import { AuthBox } from '../../components/auth-box'
+import { SignIn as SignInBox } from '@clerk/nextjs'
 
 export default function SignIn() {
-  return <AuthBox mode='sign-in' />
+  return <SignInBox />
 }
