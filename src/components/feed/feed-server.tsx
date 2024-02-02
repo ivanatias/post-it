@@ -1,6 +1,8 @@
 import { currentUser } from '@clerk/nextjs'
 import { PostCard } from '../post'
 import { MasonryLayout } from '../utils/masonry-layout'
+import { ClientOnly } from '../utils/client-only'
+import { PostCardSkeleton } from '../post/components/post-skeleton'
 import { client } from '@/lib/sanity/client'
 import {
   getAllPostsQuery,
@@ -67,15 +69,25 @@ export async function FeedServer(props: FeedProps) {
   return (
     <section>
       {posts.length > 0 ? (
-        <MasonryLayout>
-          {posts.map(post => (
-            <PostCard
-              post={post}
-              loggedInUserID={parseUserID(user?.id as string)}
-              key={post._id}
-            />
-          ))}
-        </MasonryLayout>
+        <ClientOnly
+          fallback={
+            <div className='flex flex-wrap gap-6 w-full justify-center lg:justify-start'>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <PostCardSkeleton key={index} />
+              ))}
+            </div>
+          }
+        >
+          <MasonryLayout>
+            {posts.map(post => (
+              <PostCard
+                post={post}
+                loggedInUserID={parseUserID(user?.id as string)}
+                key={post._id}
+              />
+            ))}
+          </MasonryLayout>
+        </ClientOnly>
       ) : (
         <p
           className={`text-muted-foreground text-lg lg:text-xl font-semibold ${
