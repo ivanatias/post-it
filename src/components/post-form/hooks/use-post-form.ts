@@ -88,11 +88,9 @@ export function usePostForm({
           userID: parseUserID(user?.id as string)
         })
 
-    const successMsg = isEditing ? 'Post edited!' : 'Post created!'
+    const successMsg = `Post ${isEditing ? 'edited' : 'created'}`
 
-    const errorMsg = isEditing
-      ? 'Could not edit post, try again.'
-      : 'Could not create post, try again.'
+    const errorMsg = `Could not ${isEditing ? 'edit' : 'create'} post. Try again.`
 
     try {
       await submitPromise
