@@ -109,7 +109,7 @@ export function PostActions({
               image.
             </DialogDescription>
           </DialogHeader>
-          <div className='max-h-[640px] overflow-y-auto'>
+          <div className='max-h-[500px] overflow-y-auto'>
             <PostForm afterEdit={afterEdit} {...restOfProps} />
           </div>
         </DialogContent>
