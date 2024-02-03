@@ -7,8 +7,8 @@ interface ClientOnlyProps {
   fallback?: React.ReactNode
 }
 
-export function ClientOnly({ children, fallback }: ClientOnlyProps) {
+export function ClientOnly({ children, fallback = null }: ClientOnlyProps) {
   const isClient = useClientOnly()
 
-  return isClient ? <>{children}</> : <>{fallback ?? null}</>
+  return <>{isClient ? children : fallback}</>
 }
