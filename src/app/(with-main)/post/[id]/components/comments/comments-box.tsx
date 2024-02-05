@@ -2,7 +2,7 @@
 
 import { CommentItem } from './comment-item'
 import { SubmitButton } from '@/components/submit-btn'
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import { UserAvatar } from '@/components/user-avatar'
 import { Textarea } from '@/components/ui/textarea'
 import { useComments, type UseComments } from '../../hooks/use-comments'
 
@@ -45,12 +45,10 @@ export function CommentsBox({ comments, loggedInUser }: CommentsBoxProps) {
         action={addComment}
       >
         <div className='flex flex-1 flex-shrink-0 items-center gap-4'>
-          <Avatar className='w-6 h-6'>
-            <AvatarImage className='object-cover' src={loggedInUser.image} />
-            <AvatarFallback>
-              <span className='text-xs'>{loggedInUser.fullUsername}</span>
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar
+            userName={loggedInUser.fullUsername}
+            imageUrl={loggedInUser.image}
+          />
           <Textarea
             ref={commentsInputRef}
             name='comment'

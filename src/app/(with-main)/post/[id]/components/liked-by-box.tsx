@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import { UserAvatar } from '@/components/user-avatar'
 import { PlusIcon } from 'lucide-react'
 import { formatLikedBy } from '@/lib/utils'
 import { type PostDetails } from '@/lib/sanity/types/post'
@@ -27,13 +27,11 @@ export function LikedByBox({ liked }: { liked: PostDetails['saved'] }) {
         <ul className='flex items-center'>
           {sliced.map((saved, index) => (
             <li key={saved._key}>
-              <Avatar className={`w-8 h-8 ${index > 0 ? '-ml-2' : ''}`}>
-                <AvatarImage
-                  className='object-cover'
-                  src={saved.postedBy.image}
-                />
-                <AvatarFallback>{saved.postedBy.userName}</AvatarFallback>
-              </Avatar>
+              <UserAvatar
+                userName={saved.postedBy.userName}
+                imageUrl={saved.postedBy.image}
+                className={index > 0 ? '-ml-2' : ''}
+              />
             </li>
           ))}
         </ul>
@@ -62,15 +60,10 @@ export function LikedByBox({ liked }: { liked: PostDetails['saved'] }) {
                 href={`/user/${item.postedBy._id}`}
                 aria-label={`View ${item.postedBy.userName} profile`}
               >
-                <Avatar className='w-8 h-8'>
-                  <AvatarImage
-                    className='object-cover'
-                    src={item.postedBy.image}
-                  />
-                  <AvatarFallback>
-                    <span className='text-xs'>{item.postedBy.userName}</span>
-                  </AvatarFallback>
-                </Avatar>
+                <UserAvatar
+                  userName={item.postedBy.userName}
+                  imageUrl={item.postedBy.image}
+                />
                 <p className='text-xs lg:text-sm'>{item.postedBy.userTag}</p>
               </Link>
             ))}

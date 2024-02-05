@@ -1,7 +1,7 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { type OptimisticComment } from '../../hooks/use-comments'
+import { UserAvatar } from '@/components/user-avatar'
 import { Timeago } from '@/components/time-ago'
 import { Trash } from 'lucide-react'
+import { type OptimisticComment } from '../../hooks/use-comments'
 
 export function CommentItem({
   comment,
@@ -17,12 +17,7 @@ export function CommentItem({
   return (
     <li className='flex flex-col gap-4'>
       <div className='flex items-center gap-2'>
-        <Avatar className='w-8 h-8'>
-          <AvatarImage className='object-cover' src={postedBy.image} />
-          <AvatarFallback>
-            <span className='text-xs'>{postedBy.userName}</span>
-          </AvatarFallback>
-        </Avatar>
+        <UserAvatar userName={postedBy.userName} imageUrl={postedBy.image} />
         <p className='text-xs lg:text-sm font-bold'>{postedBy.userTag}</p>
         {isOwnComment && (
           <form action={deleteComment}>

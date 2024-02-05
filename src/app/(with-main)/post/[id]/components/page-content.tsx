@@ -2,8 +2,8 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { currentUser } from '@clerk/nextjs'
 import { PostActions } from './post-actions'
+import { UserAvatar } from '@/components/user-avatar'
 import { LikedByBox } from './liked-by-box'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { client } from '@/lib/sanity/client'
 import { getPostQuery } from '@/lib/sanity/queries'
 import { parseUserID } from '@/lib/utils'
@@ -38,16 +38,17 @@ export async function PostDetailsPageContent({
   return (
     <section className='relative flex flex-col gap-8'>
       <header className='flex flex-col gap-4 items-center w-full'>
-        <div className='flex items-center justify-center gap-3 text-lg lg:text-xl font-bold'>
+        <div className='flex flex-wrap items-center justify-center gap-3 text-lg lg:text-xl font-bold'>
           <p>Posted by</p>
           <Link
             className='flex items-center gap-2'
             href={`/user/${post.postedBy._id}`}
           >
-            <Avatar>
-              <AvatarImage className='object-cover' src={post.postedBy.image} />
-              <AvatarFallback>{post.postedBy.userName}</AvatarFallback>
-            </Avatar>
+            <UserAvatar
+              userName={post.postedBy.userName}
+              imageUrl={post.postedBy.image}
+              size='lg'
+            />
             <p>{post.postedBy.userTag}</p>
           </Link>
         </div>

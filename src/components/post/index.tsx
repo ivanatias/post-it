@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { UserAvatar } from '../user-avatar'
 import {
   Dialog,
   DialogContent,
@@ -13,7 +14,6 @@ import {
   DialogTrigger
 } from '../ui/dialog'
 import { Button } from '../ui/button'
-import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar'
 import { HeartIcon, DownloadIcon, Trash } from 'lucide-react'
 import { usePostActions } from './hooks/use-post-actions'
 import type { Post } from '@/lib/sanity/types/post'
@@ -59,12 +59,11 @@ export function PostCard({ post, loggedInUserID }: PostCardProps) {
           href={`/user/${post.postedBy._id}`}
           title={`${post.postedBy.userName} profile`}
         >
-          <Avatar>
-            <AvatarImage className='object-cover' src={post.postedBy.image} />
-            <AvatarFallback>
-              <span className='text-xs'>{post.postedBy.userName}</span>
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar
+            userName={post.postedBy.userName}
+            imageUrl={post.postedBy.image}
+            size='lg'
+          />
           <h3 className='font-semibold text-slate-300 text-sm lg:text-base truncate max-w-[130px]'>
             {post.postedBy.userTag}
           </h3>
