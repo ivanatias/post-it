@@ -13,11 +13,9 @@ export default function Layout({
       <div className='hidden lg:flex'>
         <Sidebar />
       </div>
-      <div className='flex flex-col w-full h-screen max-w-7xl overflow-y-auto mx-auto px-4 lg:px-8'>
-        <header>
-          <Navbar />
-        </header>
-        <main className='relative py-12 w-full'>{children}</main>
+      <div className='flex flex-col w-full h-screen max-w-7xl overflow-y-auto mx-auto'>
+        <Navbar />
+        <main className='relative py-12 w-full px-4 lg:px-8'>{children}</main>
       </div>
       {modal}
     </div>
