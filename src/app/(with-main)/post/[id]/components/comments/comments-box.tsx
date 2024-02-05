@@ -1,7 +1,7 @@
 'use client'
 
 import { CommentItem } from './comment-item'
-import { SubmitCommentButton } from './submit-btn'
+import { SubmitButton } from '@/components/submit-btn'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Textarea } from '@/components/ui/textarea'
 import { useComments, type UseComments } from '../../hooks/use-comments'
@@ -58,7 +58,7 @@ export function CommentsBox({ comments, loggedInUser }: CommentsBoxProps) {
             defaultValue=''
           />
         </div>
-        <SubmitCommentButton />
+        <SubmitButton idleText='Add comment' pendingText='Adding comment...' />
       </form>
     </section>
   )
