@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import { UserAuthButton } from './user-auth-btn'
+import { UserAuthButton } from '../user-auth-btn'
 import { MobileWidgets } from './mobile-widgets'
-import { Search } from './search'
+import { Search } from '../search'
 import { PlusIcon, SearchIcon } from 'lucide-react'
 
 export function Navbar() {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Sidebar } from './sidebar'
-import { Search } from './search'
+import { Search } from '../search'
 import { MenuIcon, SearchIcon, PlusIcon } from 'lucide-react'
 
 export function MobileWidgets() {
