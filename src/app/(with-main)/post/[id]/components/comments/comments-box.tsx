@@ -1,10 +1,9 @@
 'use client'
 
+import { CommentItem } from './comment-item'
 import { SubmitCommentButton } from './submit-btn'
-import { Timeago } from '@/components/time-ago'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Textarea } from '@/components/ui/textarea'
-import { Trash } from 'lucide-react'
 import { useComments, type UseComments } from '../../hooks/use-comments'
 
 type CommentsBoxProps = UseComments
@@ -30,48 +29,13 @@ export function CommentsBox({ comments, loggedInUser }: CommentsBoxProps) {
           ref={commentsBoxRef}
           className='flex flex-col gap-5 max-h-[500px] overflow-y-auto'
         >
-          {optimisticComments.map(item => (
-            <li key={item._key} className='flex flex-col gap-4'>
-              <div className='flex items-center gap-2'>
-                <Avatar className='w-8 h-8'>
-                  <AvatarImage
-                    className='object-cover'
-                    src={item.postedBy.image}
-                  />
-                  <AvatarFallback>
-                    <span className='text-xs'>{item.postedBy.userName}</span>
-                  </AvatarFallback>
-                </Avatar>
-                <p className='text-xs lg:text-sm font-bold'>
-                  {item.postedBy.userTag}
-                </p>
-                {item.postedBy._id === loggedInUser.id && (
-                  <form action={deleteComment}>
-                    <input type='hidden' name='commentKey' value={item._key} />
-                    <button
-                      className='disabled:opacity-70 disabled:cursor-not-allowed'
-                      type='submit'
-                      aria-label='Delete comment'
-                      disabled={item.sending}
-                    >
-                      <Trash className='w-4 h-4 text-red-500' />
-                    </button>
-                  </form>
-                )}
-              </div>
-              <div className='flex flex-col gap-3'>
-                <div
-                  className={`bg-slate-800 text-white text-xs lg:text-sm rounded-3xl p-3 w-fit min-w-[60px]
-                    ${item.sending === true ? 'animate-pulse' : ''}
-                  `}
-                >
-                  {item.comment}
-                </div>
-                <time className='text-xs text-muted-foreground'>
-                  <Timeago date={new Date(item.createdAt)} />
-                </time>
-              </div>
-            </li>
+          {optimisticComments.map(comment => (
+            <CommentItem
+              key={comment._key}
+              comment={comment}
+              deleteComment={deleteComment}
+              isOwnComment={comment.postedBy._id === loggedInUser.id}
+            />
           ))}
         </ul>
       )}

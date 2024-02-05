@@ -14,7 +14,7 @@ export interface UseComments {
   }
 }
 
-type OptimisticComment = Comment & {
+export type OptimisticComment = Comment & {
   sending?: boolean
 }
 
