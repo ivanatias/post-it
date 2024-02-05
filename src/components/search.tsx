@@ -12,7 +12,7 @@ export function Search({ onSearch, className }: SearchProps) {
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const searchTerm = e.currentTarget.search.value
+    const searchTerm = e.currentTarget.search.value as string
 
     if (searchTerm.trim() === '') return
 
